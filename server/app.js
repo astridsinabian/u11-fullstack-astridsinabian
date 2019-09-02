@@ -1,33 +1,28 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-
-
-// Configures enviroment varibles in dotenv-file
-require('dotenv').config();
-
-// Creates express server
 const app = express();
 const port = process.env.PORT || 5000;
+const authRoute = require('./routes/auth');
 
+// Configures enviroment varibles in dotenv-file
+dotenv.config();
 
-// Middleware and allows to parse json
-app.use(cors());
+// Connect to DB
+mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true, useCreateIndex: true }, () => 
+    console.log("MongoDB connection established succesfully!")
+);
+
+// Middlewares
 app.use(express.json());
 
-const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
-const connection = mongoose.connection;
-connection.once('open', () => {
-    console.log("MongoDB connection established succesfully!");
-})
-
-
-const usersRouter = require('./routes/users');
-
-app.use('/users', usersRouter);
+// Route middlewares
+app.use('/api/user', authRoute);
 
 // What starts the server
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });
+
