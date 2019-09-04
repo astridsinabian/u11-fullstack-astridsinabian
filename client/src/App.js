@@ -8,7 +8,6 @@ import Profile from './components/Profile';
 import Register from './components/Register';
 import Login from './components/Login';
 
-
 const Container = styled.div`
   margin: 0;
   padding: 0;
