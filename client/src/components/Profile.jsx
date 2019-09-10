@@ -13,7 +13,7 @@ class Profile extends Component {
     render() { 
         return ( 
             <div>
-                <h1>Welcome {this.props.username}</h1>
+                <h1>Welcome</h1>
                 <button onClick={this.handleLogout.bind(this)}>Logout</button>
             </div>
          );

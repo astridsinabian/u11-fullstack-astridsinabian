@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-
+import AuthService from './AuthService';
 
 class Register extends Component {
     
@@ -17,6 +16,7 @@ class Register extends Component {
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.Auth = new AuthService();
     }
 
     onChange(e) {
@@ -27,21 +27,9 @@ class Register extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        axios({
-            method: 'POST',
-            url: 'http://localhost:5000/api/user/register',
-            data: this.state,
-            config: { 
-                headers: {
-                    'Content-Type': 'multipart/form-data' 
-                    }
-                }
-            })
-            .then(data => {
-                this.props.history.replace("/login");
-            })
-            .catch((res) => console.log(res));
-        }
+        this.Auth.register(this.state);
+        this.props.history.replace('/profile');
+    }
 
     render() { 
         return ( 

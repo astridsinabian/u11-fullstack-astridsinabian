@@ -3,6 +3,7 @@ import axios from 'axios';
 export default class AuthService {
     constructor() {
         this.login = this.login.bind(this);
+        this.register = this.register.bind(this);
     }
 
     login = (username, password) => {
@@ -17,6 +18,19 @@ export default class AuthService {
                 
             })
             .catch((res) => console.log(res));
+        }
+
+    register = (data) => {
+        axios({
+            method: 'POST',
+            url: 'http://localhost:5000/api/user/register',
+            data: data,
+            config: { 
+                headers: {
+                    'Content-Type': 'multipart/form-data' 
+                    }
+                }
+            })
         }
 
     isLoggedIn = () => {
