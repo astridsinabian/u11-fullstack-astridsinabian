@@ -7,19 +7,15 @@ const { registerValidation, loginValidation } = require('../validation');
 
 
 router.post('/register', async (req, res) => {
-    // Validation before making user
     const { error } = registerValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
-    // Check if user exists
     const emailExist = await User.findOne({email: req.body.email});
     if(emailExist) return res.status(400).send('Email already exists');
 
-    // Hash passwords
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-    // Create new user
     const user = new User({
         username: req.body.username,
         firstname: req.body.firstname,
@@ -36,20 +32,19 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const { error } = loginValidation(req.body);
+    const { username, password } = req.body.user;
+    const { error } = loginValidation(req.body.user);
     if(error) return res.status(400).send(error.details[0].message);
 
-    const user = await User.findOne({username: req.body.username});
+    const user = await User.findOne({username: req.body.user.username});
     if(!user) return res.status(400).send('Username does not exists');
 
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    const validPassword = await bcrypt.compare(req.body.user.password, user.password);
     if(!validPassword) return res.status(400).send('Invalid password');
 
-    // Create and assign a token
-    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+    const token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET, { expiresIn: '1h' });
     res.header('auth-token', token).send(token);
 });
-
 
 
 module.exports = router;

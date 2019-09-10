@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-class Home extends Component {
+class FrontPage extends Component {
     state = {  }
     render() { 
         return ( 
-            <div>hello home</div>
+            <div>Welcome to my Twitter-Clone!</div>
          );
     }
 }
  
-export default Home;
+export default FrontPage;

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
+
 class Register extends Component {
     
     constructor(props) {
@@ -27,18 +28,20 @@ class Register extends Component {
     onSubmit(e) {
         e.preventDefault();
         axios({
-            method: 'post',
+            method: 'POST',
             url: 'http://localhost:5000/api/user/register',
             data: this.state,
             config: { 
                 headers: {
                     'Content-Type': 'multipart/form-data' 
+                    }
                 }
-            }
-        })
-            .then((response) => console.log(response))
-            .catch((response) => console.log(response));
-    }
+            })
+            .then(data => {
+                this.props.history.replace("/login");
+            })
+            .catch((res) => console.log(res));
+        }
 
     render() { 
         return ( 
@@ -108,5 +111,5 @@ class Register extends Component {
          );
     }
 }
- 
+
 export default Register;
