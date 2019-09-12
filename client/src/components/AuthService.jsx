@@ -33,7 +33,7 @@ export default class AuthService {
             })
         }
 
-    isLoggedIn = () => {
+    loggedIn = () => {
         const token = this.getToken();
         return !!token;
     }

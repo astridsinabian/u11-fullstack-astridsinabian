@@ -24,7 +24,7 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        if(this.Auth.isLoggedIn()) {
+        if(this.Auth.loggedIn()) {
             this.props.history.replace('/profile')
         }
     }

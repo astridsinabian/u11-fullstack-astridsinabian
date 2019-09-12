@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,20 +13,22 @@ const Container = styled.div`
   padding: 0;
 `;
 
-function App() {
-  return (
-    <Router>
-      <Container>
-        <NavBar />
-        <Switch>
-          <Route path="/" exact component={FrontPage} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/register" component={Register} />
-          <Route path="/login" component={Login} />
-        </Switch>
-      </Container>
-    </Router>
-  );
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <Container>
+          <NavBar />
+          <Switch>
+            <Route path="/" exact component={FrontPage} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
+          </Switch>
+        </Container>
+      </Router>
+    );
+  }
 }
 
 export default App;
