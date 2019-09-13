@@ -7,9 +7,10 @@ const { registerValidation, loginValidation } = require('../validation');
 
 
 router.post('/register', async (req, res) => {
+    debugger;
     const { error } = registerValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
-
+    debugger;
     const emailExist = await User.findOne({email: req.body.email});
     if(emailExist) return res.status(400).send('Email already exists');
 
@@ -21,7 +22,8 @@ router.post('/register', async (req, res) => {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         email: req.body.email,
-        password: hashedPassword
+        password: hashedPassword, 
+        description: req.body.description
     });
     try {
         const savedUser = await user.save();

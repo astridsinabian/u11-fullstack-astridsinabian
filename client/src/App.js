@@ -6,7 +6,7 @@ import NavBar from './components/NavBar';
 import Profile from './components/Profile';
 import Register from './components/Register';
 import Login from './components/Login';
-import FrontPage from './components/FrontPage'
+import FrontPage from './components/FrontPage';
 
 const Container = styled.div`
   margin: 0;

@@ -19,12 +19,12 @@ class Login extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.Auth.login(this.state.username, this.state.password)
+        this.Auth.login(this.state.username, this.state.password);
         this.props.history.replace('/profile');
     }
 
     componentDidMount() {
-        if(this.Auth.loggedIn()) {
+        if(this.Auth.isLoggedIn()) {
             this.props.history.replace('/profile')
         }
     }

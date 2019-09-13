@@ -15,7 +15,6 @@ export default class AuthService {
         axios.post('http://localhost:5000/api/user/login', { user })
             .then(res => {
                 this.setToken(res.data);
-                
             })
             .catch((res) => console.log(res));
         }
@@ -33,7 +32,7 @@ export default class AuthService {
             })
         }
 
-    loggedIn = () => {
+    isLoggedIn = () => {
         const token = this.getToken();
         return !!token;
     }

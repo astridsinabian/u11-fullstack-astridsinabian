@@ -34,6 +34,12 @@ const userSchema = new mongoose.Schema({
         trim: true,
         max: 255
     },
+    description: {
+        type: String,
+        required: false,
+        trim: true,
+        max: 400
+    },
     date: {
         type: Date,
         default: Date.now
