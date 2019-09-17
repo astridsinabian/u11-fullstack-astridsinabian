@@ -4,13 +4,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { registerValidation, loginValidation } = require('../validation');
 
-
-
 router.post('/register', async (req, res) => {
-    debugger;
     const { error } = registerValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
-    debugger;
+
     const emailExist = await User.findOne({email: req.body.email});
     if(emailExist) return res.status(400).send('Email already exists');
 

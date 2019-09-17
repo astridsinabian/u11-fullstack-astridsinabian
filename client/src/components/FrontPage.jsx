@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 
 class FrontPage extends Component {
-    state = {  }
     render() { 
         return ( 
-            <div>Welcome to my Twitter-Clone!</div>
+            <div>Välkommen till min Twitter-Clone!</div>
          );
     }
 }

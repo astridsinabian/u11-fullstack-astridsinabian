@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import AuthService from './AuthService';
+
 
 class Login extends Component {
     constructor(props) {
         super(props);
-        
+
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.login = this.login.bind(this);
         this.Auth = new AuthService();
     }
 
@@ -19,24 +22,31 @@ class Login extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.Auth.login(this.state.username, this.state.password);
-        this.props.history.replace('/profile');
+        this.login(this.state.username, this.state.password);
     }
 
-    componentDidMount() {
-        if(this.Auth.isLoggedIn()) {
-            this.props.history.replace('/profile')
-        }
-    }
+    login = (username, password) => {
+        const user = { 
+            username: username, 
+            password: password
+        };
 
+        axios.post('http://localhost:5000/api/user/login', { user })
+            .then(res => {
+                this.Auth.setToken(res.data);
+                this.props.history.push('/profile');
+            })
+            .catch((res) => console.log(res));
+    }
+    
     render() { 
         return ( 
         <div>
-            <h2 style={{display: 'flex', justifyContent: 'center', margin: '30px'}}>Log in - Twitter Clone</h2>
+            <h2 style={{display: 'flex', justifyContent: 'center', margin: '30px'}}>Twitter Clone</h2>
             <div style={{display: 'flex', justifyContent: 'center'}}>
                 <Form onSubmit={this.onSubmit}>
                     <FormGroup>
-                        <Label>Username:</Label>
+                        <Label>Användarnamn:</Label>
                         <Input 
                         onChange={this.onChange}
                         type="text"
@@ -45,7 +55,7 @@ class Login extends Component {
                     </FormGroup>
 
                     <FormGroup>
-                        <Label>Password:</Label>
+                        <Label>Lösenord:</Label>
                         <Input 
                         onChange={this.onChange}
                         type="password"
@@ -53,7 +63,7 @@ class Login extends Component {
                         />
                     </FormGroup>
 
-                    <Button>Log in</Button>
+                    <Button>Logga in</Button>
                 </Form>
             </div>
         </div>

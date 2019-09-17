@@ -3,8 +3,7 @@ import AuthService from './AuthService';
 import FormUserDetails from './FormUserDetails';
 import FormDescription from './FormDescription';
 import Confirm from './Confirm';
-import Profile from './Profile';
-import Login from './Login';
+import Success from './Success';
 
 class Register extends Component {
     constructor(props) {
@@ -75,14 +74,9 @@ class Register extends Component {
                     />
                 );
             case 4:
-                if(this.Auth.isLoggedIn() === true) {
-                    return <Profile 
-                        values={values}
-                />
-                } else {
-                    return <Login />
-                }
-                
+                return (
+                    <Success />
+                );
         }
     }
 }

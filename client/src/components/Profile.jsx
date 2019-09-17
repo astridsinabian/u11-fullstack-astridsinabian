@@ -11,13 +11,17 @@ class Profile extends Component {
     }
 
     render() { 
+        
         return ( 
             <div>
-                <h1>Welcome</h1>
-                <button onClick={this.handleLogout.bind(this)}>Logout</button>
+                <h1>Välkommen!</h1>
+                <button onClick={this.handleLogout.bind(this)}>
+                    Logga ut
+                </button>
             </div>
          );
-    }
+    
+}
 }
  
 export default Profile;

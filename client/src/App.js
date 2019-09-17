@@ -7,6 +7,7 @@ import Profile from './components/Profile';
 import Register from './components/Register';
 import Login from './components/Login';
 import FrontPage from './components/FrontPage';
+import PrivateRoute from './components/PrivateRoute';
 
 const Container = styled.div`
   margin: 0;
@@ -21,9 +22,10 @@ class App extends Component {
           <NavBar />
           <Switch>
             <Route path="/" exact component={FrontPage} />
-            <Route path="/profile" component={Profile} />
+            <PrivateRoute path="/profile" component={Profile} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
+            <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </Container>
       </Router>
