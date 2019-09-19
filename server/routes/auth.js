@@ -48,11 +48,10 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/profile', function(req, res) {
-    const token = req.body.token || req.query.token;
+    const token = req.body.token || req.headers.authorization;
     if (!token) {
      return res.status(401).json({message: 'Must pass token'});
     }
-
     jwt.verify(token, process.env.TOKEN_SECRET, function(err, user) {
         if (err) throw err;
         User.findById({

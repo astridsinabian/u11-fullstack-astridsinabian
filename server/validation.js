@@ -13,7 +13,6 @@ const registerValidation = (data) => {
 }
 
 const loginValidation = (data) => {
-    debugger;
     const schema = {
         username: Joi.string().required(),
         password: Joi.string().required()
