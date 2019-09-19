@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AuthService from './AuthService';
+import AuthService from '../AuthService';
 import FormUserDetails from './FormUserDetails';
 import FormDescription from './FormDescription';
 import Confirm from './Confirm';

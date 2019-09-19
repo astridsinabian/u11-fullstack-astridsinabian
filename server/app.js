@@ -7,8 +7,6 @@ const app = express();
 const port = process.env.PORT || 5000;
 const authRoute = require('./routes/auth');
 
-
-
 // Configures enviroment varibles in dotenv-file
 dotenv.config();
 

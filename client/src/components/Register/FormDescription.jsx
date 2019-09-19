@@ -4,7 +4,6 @@ import { FormGroup, Input, Button } from 'reactstrap';
 export class FormDescription extends Component {
     continue = e => {
         e.preventDefault();
-        debugger;
         this.props.nextStep();
     }
 

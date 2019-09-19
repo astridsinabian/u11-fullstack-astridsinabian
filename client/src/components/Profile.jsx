@@ -5,13 +5,18 @@ const Auth = new AuthService();
 
 class Profile extends Component {
 
+    constructor(props) {
+        super(props);
+        
+        this.Auth = new AuthService();
+    }
+
     handleLogout = () => {
         Auth.logout();
         this.props.history.replace('/login');
     }
 
     render() { 
-        
         return ( 
             <div>
                 <h1>Välkommen!</h1>

@@ -22,16 +22,18 @@ router.post('/register', async (req, res) => {
         password: hashedPassword, 
         description: req.body.description
     });
+ 
     try {
         const savedUser = await user.save();
         res.send({user: user._id});
+
     } catch(err) {
         res.status(400).send(err);
     }
 });
 
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body.user;
+    // const { username, password } = req.body.user;
     const { error } = loginValidation(req.body.user);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -45,5 +47,25 @@ router.post('/login', async (req, res) => {
     res.header('auth-token', token).send(token);
 });
 
+router.get('/profile', function(req, res) {
+    const token = req.body.token || req.query.token;
+    if (!token) {
+     return res.status(401).json({message: 'Must pass token'});
+    }
+
+    jwt.verify(token, process.env.TOKEN_SECRET, function(err, user) {
+        if (err) throw err;
+        User.findById({
+            '_id': user.id
+            }, function(err, user) {
+                if (user.id.match(/^[0-9a-fA-F]{24}$/)) {
+                if (err) throw err;
+                res.json({
+                    user: user
+                });
+            }
+        });
+    });
+});
 
 module.exports = router;

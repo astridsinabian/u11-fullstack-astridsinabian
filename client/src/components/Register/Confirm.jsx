@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form } from 'reactstrap';
-import AuthService from './AuthService';
+import AuthService from '../AuthService';
 
 export class Confirm extends Component {
 

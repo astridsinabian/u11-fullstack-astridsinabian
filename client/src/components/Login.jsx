@@ -30,7 +30,7 @@ class Login extends Component {
             username: username, 
             password: password
         };
-
+        debugger;
         axios.post('http://localhost:5000/api/user/login', { user })
             .then(res => {
                 this.Auth.setToken(res.data);

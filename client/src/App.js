@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import NavBar from './components/NavBar';
 import Profile from './components/Profile';
-import Register from './components/Register';
+import Register from './components/Register/Register';
 import Login from './components/Login';
 import FrontPage from './components/FrontPage';
 import PrivateRoute from './components/PrivateRoute';
