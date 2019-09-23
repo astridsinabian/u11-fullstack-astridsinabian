@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AuthService from './AuthService';
 import axios from 'axios';
+import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
 const Auth = new AuthService();
 
@@ -10,14 +11,27 @@ class Profile extends Component {
         super(props);
 
         this.state = {
-            username: null,
-            firstname: null,
-            lastname: null,
-            email: null,
-            description: null
+            username: '',
+            firstname: '',
+            lastname: '',
+            email: '',
+            description: ''
         }
-        
+
+        this.handleChange = this.handleChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
         this.Auth = new AuthService();
+    }
+
+    handleChange(e) {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+        this.editUser();
     }
 
     handleLogout = () => {
@@ -33,6 +47,7 @@ class Profile extends Component {
                     'Authorization': token
                 }
             }
+
         axios.get('http://localhost:5000/api/user/profile', config)
         .then(res => this.setState({
             username: res.data.user.username,
@@ -41,6 +56,24 @@ class Profile extends Component {
             email: res.data.user.email,
             description: res.data.user.description
         }));
+    }
+
+    editUser = () => {
+        let token = Auth.getToken();
+
+        const config = { 
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': token
+            },
+            data: {
+                username: this.state.username,
+                firstname: this.state.firstname,
+                lastname: this.state.lastname,
+                description: this.state.description
+            }
+        }
+        axios.patch('http://localhost:5000/api/user/profile', config);
     }
 
     componentDidMount() {
@@ -52,12 +85,62 @@ class Profile extends Component {
         return ( 
             <div>
                 <h1>Välkommen {firstname} {lastname}!</h1>
-                <div>{username}</div>
-                <div>{email}</div>
-                <div>{description}</div>
                 <button onClick={this.handleLogout.bind(this)}>
                     Logga ut
                 </button>
+
+                <Form onSubmit={this.onSubmit}>
+                    <FormGroup>
+                    <Label>Användarnamn:</Label>
+                        <Input 
+                        onChange={this.handleChange}
+                        value={username}
+                        type="text"
+                        name="username"
+                        />
+                    </FormGroup>
+
+                    <FormGroup>
+                    <Label>Förnamn:</Label>
+                        <Input 
+                        onChange={this.handleChange}
+                        value={firstname}
+                        type="text"
+                        name="firstname"
+                        />
+                    </FormGroup>
+
+                    <FormGroup>
+                    <Label>Efternamn:</Label>
+                        <Input 
+                        onChange={this.handleChange}
+                        value={lastname}
+                        type="text"
+                        name="lastname"
+                        />
+                    </FormGroup>
+
+                    <FormGroup>
+                    <Label>Email:</Label>
+                        <Input
+                        value={email}
+                        readOnly
+                        type="text"
+                        />
+                    </FormGroup>
+
+                    <FormGroup>
+                    <Label>Beskriv dig själv</Label>
+                        <Input 
+                        onChange={this.handleChange}
+                        value={description}
+                        type="textarea"
+                        name="description"
+                        />
+                    </FormGroup>
+
+                    <Button>Ändra uppgifter</Button>
+                </Form>
             </div>
          );
     }

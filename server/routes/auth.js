@@ -33,7 +33,6 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    // const { username, password } = req.body.user;
     const { error } = loginValidation(req.body.user);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -67,4 +66,30 @@ router.get('/profile', function(req, res) {
     });
 });
 
+router.patch('/profile', (req, res) => {
+    const token = req.body.token || req.body.headers.Authorization;
+    if (!token) {
+     return res.status(401).json({message: 'Must pass token'});
+    }
+    jwt.verify(token, process.env.TOKEN_SECRET, function(err, user) {
+        if (err) throw err;
+        User.findByIdAndUpdate({
+            '_id': user.id
+            }, {
+                "username": req.body.data.username,
+                "firstname": req.body.data.firstname,
+                "lastname": req.body.data.lastname,
+                "description": req.body.data.description
+            }, { new: true },
+            (err, user) => {
+                if(err) {
+                    res.json({ status: "error", message: `${err}` });
+                }
+                res.status(200).json(user);
+            }
+        ); 
+    })
+});
+
 module.exports = router;
+
