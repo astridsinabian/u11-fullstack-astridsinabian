@@ -67,7 +67,7 @@ router.get('/profile', function(req, res) {
 });
 
 router.patch('/profile', (req, res) => {
-    const token = req.body.token || req.headers.authorization;
+    const token = req.body.token || req.body.headers.Authorization;
     if (!token) {
      return res.status(401).json({message: 'Must pass token'});
     }
@@ -76,10 +76,10 @@ router.patch('/profile', (req, res) => {
         User.findByIdAndUpdate({
             '_id': user.id
             }, {
-                "username": req.body.username,
-                "firstname": req.body.firstname,
-                "lastname": req.body.lastname,
-                "description": req.body.description
+                "username": req.body.data.username,
+                "firstname": req.body.data.firstname,
+                "lastname": req.body.data.lastname,
+                "description": req.body.data.description
             }, { new: true },
             (err, user) => {
                 if(err) {
