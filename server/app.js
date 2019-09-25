@@ -5,7 +5,9 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 5000;
+
 const authRoute = require('./routes/auth');
+const tweets = require('./routes/tweets');
 
 // Configures enviroment varibles in dotenv-file
 dotenv.config();
@@ -22,6 +24,7 @@ app.use(express.json());
 
 // Route middlewares
 app.use('/api/user', authRoute);
+app.use('/api/tweets', tweets);
 
 // What starts the server
 app.listen(port, () => {

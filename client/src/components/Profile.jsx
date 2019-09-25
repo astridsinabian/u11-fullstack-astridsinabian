@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AuthService from './AuthService';
 import axios from 'axios';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import AddTweet from './AddTweet';
 
 const Auth = new AuthService();
 
@@ -141,6 +142,8 @@ class Profile extends Component {
 
                     <Button>Ändra uppgifter</Button>
                 </Form>
+
+                <AddTweet />
             </div>
          );
     }

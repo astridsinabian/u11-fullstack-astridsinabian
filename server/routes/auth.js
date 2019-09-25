@@ -3,6 +3,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { registerValidation, loginValidation } = require('../validation');
+// const verifyToken = require('./verifyToken');
 
 router.post('/register', async (req, res) => {
     const { error } = registerValidation(req.body);
@@ -87,9 +88,11 @@ router.patch('/profile', (req, res) => {
                 }
                 res.status(200).json(user);
             }
-        ); 
+        );
     })
 });
+
+
 
 module.exports = router;
 
