@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import AuthService from './AuthService';
 import axios from 'axios';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import AddTweet from './AddTweet';
+import AddTweet from './Tweets/AddTweet';
+import DisplayTweets from './Tweets/DisplayTweets';
 
 const Auth = new AuthService();
 
@@ -144,6 +145,7 @@ class Profile extends Component {
                 </Form>
 
                 <AddTweet />
+                <DisplayTweets />
             </div>
          );
     }

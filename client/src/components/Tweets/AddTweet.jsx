@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import axios from 'axios';
+import AuthService from '../AuthService';
+
+const Auth = new AuthService();
 
 class AddTweet extends Component {
 
@@ -7,22 +11,40 @@ class AddTweet extends Component {
         super(props);
 
         this.state = {
-            tweet: ''
+            text: ''
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.Auth = new AuthService();
     }
 
     onSubmit(e) {
         e.preventDefault();
-        console.log("Post tweet to user")
+        console.log("Post tweet to user");
+        debugger;
+        this.addTweet(this.state.text);
     }
 
     handleChange(e) {
         this.setState({
             [e.target.name]: e.target.value
         });
+    }
+
+    addTweet = () => {
+        let token = Auth.getToken();
+
+        const config = { 
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': token
+            },
+            data: {
+                text: this.state.text,
+            }
+        }
+        axios.post('http://localhost:5000/api/tweets/add', config);
     }
 
     render() { 
@@ -34,9 +56,9 @@ class AddTweet extends Component {
                     <FormGroup>
                             <Input 
                             onChange={this.handleChange}
-                            value={this.state.tweet}
+                            value={this.state.text}
                             type="textarea"
-                            name="tweet"
+                            name="text"
                             placeholder="Vad har du för tankar just nu?"
                             />
                         <Button>Publicera</Button>
