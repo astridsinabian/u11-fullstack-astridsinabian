@@ -5,6 +5,9 @@ const tweetSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }, 
+    username: {
+        type: String
+    },
     text: {
         type: String,
         max: 400

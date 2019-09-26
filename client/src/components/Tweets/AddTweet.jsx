@@ -3,15 +3,14 @@ import { Form, FormGroup, Input, Button } from 'reactstrap';
 import axios from 'axios';
 import AuthService from '../AuthService';
 
-const Auth = new AuthService();
-
 class AddTweet extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            text: ''
+            text: '',
+            data: []
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -30,7 +29,7 @@ class AddTweet extends Component {
         });
     }
 
-    addTweet = () => {
+    async addTweet() {
         let token = this.Auth.getToken();
         const config = { 
             headers: {
@@ -41,10 +40,26 @@ class AddTweet extends Component {
                 text: this.state.text,
             }
         }
-        axios.post('http://localhost:5000/api/tweets/add', config);
+        const res = await axios.post('http://localhost:5000/api/tweets/add', config);
+        this.setState({ text: res.data.text });
+
+        this.getTweets();
+
+        this.setState({ text: '' });
+    }
+
+    async getTweets() {
+        const res = await axios.get('http://localhost:5000/api/tweets');
+        this.setState({ data: res.data })
+    }
+
+    componentDidMount() {
+        this.getTweets();
     }
 
     render() { 
+        const tweets = this.state.data.map((tweet, key) =>
+        <li key={tweet._id}>{tweet.text} - av: {tweet.username}</li> );
 
         return ( 
             <div>
@@ -62,6 +77,13 @@ class AddTweet extends Component {
                         <Button>Publicera</Button>
                     </FormGroup>
                 </Form>
+
+                <div>
+                <h2>Alla tweets:</h2>
+                <ul>
+                    {tweets}
+                </ul>
+            </div>
 
             </div>
          );

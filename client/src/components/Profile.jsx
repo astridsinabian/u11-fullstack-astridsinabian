@@ -3,7 +3,6 @@ import AuthService from './AuthService';
 import axios from 'axios';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import AddTweet from './Tweets/AddTweet';
-import DisplayTweets from './Tweets/DisplayTweets';
 import styled from 'styled-components';
 
 const Auth = new AuthService();
@@ -166,9 +165,6 @@ class Profile extends Component {
                     <AddTweet />
                 </DivStyled>
 
-                <DivStyled>
-                    <DisplayTweets />
-                </DivStyled>
             </Container>
          );
     }

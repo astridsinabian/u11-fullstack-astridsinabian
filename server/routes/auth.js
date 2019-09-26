@@ -34,6 +34,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
+    debugger;
     const { error } = loginValidation(req.body.user);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -42,8 +43,8 @@ router.post('/login', async (req, res) => {
 
     const validPassword = await bcrypt.compare(req.body.user.password, user.password);
     if(!validPassword) return res.status(400).send('Invalid password');
-
-    const token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+    debugger;
+    const token = jwt.sign({id: user._id, username: req.body.user.username}, process.env.TOKEN_SECRET, { expiresIn: '1h' });
     res.header('auth-token', token).send(token);
 });
 

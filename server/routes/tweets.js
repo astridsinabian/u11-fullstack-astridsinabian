@@ -19,9 +19,10 @@ router.post('/add', (req, res) => {
                 if (err) throw err;
 
                 const newTweet = new Tweet({
-                    publisher: user.id,
+                    publisherID: user.id,
+                    username: user.username,
                     text: req.body.data.text
-                })
+                });
 
                 newTweet.save()
                     .then(tweet => res.json(tweet))
