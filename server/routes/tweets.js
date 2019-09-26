@@ -4,7 +4,6 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 
 router.post('/add', (req, res) => {
-
     const token = req.body.token || req.body.headers.Authorization;
     if (!token) {
      return res.status(401).json({message: 'Must pass token'});
@@ -12,7 +11,7 @@ router.post('/add', (req, res) => {
 
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) throw err;
- 
+
         User.findById({
             '_id': user.id
             }, (err, user) => {
@@ -30,6 +29,13 @@ router.post('/add', (req, res) => {
             }
         });
     });
+});
+
+router.get('/', (req, res) => {
+    Tweet.find()
+        .sort({ createdAt: -1 })
+        .then(tweets => res.json(tweets))
+        .catch(err => console.log(err))
 });
 
 module.exports = router;

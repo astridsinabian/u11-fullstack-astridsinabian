@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Input, Button } from 'reactstrap';
 import axios from 'axios';
 import AuthService from '../AuthService';
 
@@ -21,8 +21,6 @@ class AddTweet extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        console.log("Post tweet to user");
-        debugger;
         this.addTweet(this.state.text);
     }
 
@@ -33,8 +31,7 @@ class AddTweet extends Component {
     }
 
     addTweet = () => {
-        let token = Auth.getToken();
-
+        let token = this.Auth.getToken();
         const config = { 
             headers: {
                 'Content-Type': "application/json",
@@ -48,6 +45,7 @@ class AddTweet extends Component {
     }
 
     render() { 
+
         return ( 
             <div>
                 <h1>Twittra här</h1>
@@ -64,6 +62,7 @@ class AddTweet extends Component {
                         <Button>Publicera</Button>
                     </FormGroup>
                 </Form>
+
             </div>
          );
     }
