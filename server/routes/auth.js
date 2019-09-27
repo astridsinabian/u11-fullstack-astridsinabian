@@ -91,5 +91,20 @@ router.patch('/profile', (req, res) => {
     })
 });
 
+router.get('/:id', (req, res) => {
+    User.findById(req.params.id)
+        .then(user => {
+            if(user) {
+                return res.json({
+                    _id: user._id,
+                    username: user.username,
+                })
+            } else {
+                return res.status(404).json({ msg: 'User not found!' })
+            }
+        })
+        .catch( err => console.log(err));
+})
+
 module.exports = router;
 
