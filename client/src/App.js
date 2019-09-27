@@ -26,7 +26,7 @@ class App extends Component {
             <PrivateRoute path="/profile" component={Profile} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
-            <Route path="/:username" exact component={OpenProfile} />
+            <Route path="/user/:username" exact component={OpenProfile} />
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </Container>

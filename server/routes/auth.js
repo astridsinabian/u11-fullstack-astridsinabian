@@ -34,7 +34,6 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    debugger;
     const { error } = loginValidation(req.body.user);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -43,7 +42,7 @@ router.post('/login', async (req, res) => {
 
     const validPassword = await bcrypt.compare(req.body.user.password, user.password);
     if(!validPassword) return res.status(400).send('Invalid password');
-    debugger;
+
     const token = jwt.sign({id: user._id, username: req.body.user.username}, process.env.TOKEN_SECRET, { expiresIn: '1h' });
     res.header('auth-token', token).send(token);
 });
@@ -93,19 +92,10 @@ router.patch('/profile', (req, res) => {
     })
 });
 
-router.get('/:id', (req, res) => {
-    User.findById(req.params.id)
-        .then(user => {
-            if(user) {
-                return res.json({
-                    _id: user._id,
-                    username: user.username,
-                })
-            } else {
-                return res.status(404).json({ msg: 'User not found!' })
-            }
-        })
-        .catch( err => console.log(err));
+router.get('/:username', (req, res) => {
+    User.findOne({ 'username': req.params.username }, (err, user) => {
+        res.json({ user: user })
+    })
 })
 
 module.exports = router;
