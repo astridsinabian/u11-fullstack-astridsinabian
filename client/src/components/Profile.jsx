@@ -2,8 +2,25 @@ import React, { Component } from 'react';
 import AuthService from './AuthService';
 import axios from 'axios';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import AddTweet from './Tweets/AddTweet';
+import styled from 'styled-components';
 
 const Auth = new AuthService();
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 10px 120px;
+`;
+
+const FormStyled = styled(Form)`
+    margin: 50px 0;
+`;
+
+const DivStyled = styled.div`
+    margin: 30px 0;
+`;
 
 class Profile extends Component {
 
@@ -83,13 +100,15 @@ class Profile extends Component {
     render() { 
         const { username, firstname, lastname, email, description } = this.state;
         return ( 
-            <div>
-                <h1>Välkommen {firstname} {lastname}!</h1>
-                <button onClick={this.handleLogout.bind(this)}>
-                    Logga ut
-                </button>
+            <Container>
+                <div>
+                    <h1>Välkommen {firstname} {lastname}!</h1>
+                    <button onClick={this.handleLogout.bind(this)}>
+                        Logga ut
+                    </button>
+                </div>
 
-                <Form onSubmit={this.onSubmit}>
+                <FormStyled onSubmit={this.onSubmit}>
                     <FormGroup>
                     <Label>Användarnamn:</Label>
                         <Input 
@@ -140,8 +159,13 @@ class Profile extends Component {
                     </FormGroup>
 
                     <Button>Ändra uppgifter</Button>
-                </Form>
-            </div>
+                </FormStyled>
+
+                <DivStyled>
+                    <AddTweet />
+                </DivStyled>
+
+            </Container>
          );
     }
 }
