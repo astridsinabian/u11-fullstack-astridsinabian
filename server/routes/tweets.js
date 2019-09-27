@@ -39,4 +39,11 @@ router.get('/', (req, res) => {
         .catch(err => console.log(err))
 });
 
+router.get('/:username', (req, res) => {
+    Tweet.find({ 'username': req.params.username })
+        .sort({ createdAt: -1 })
+        .then(tweets => res.json(tweets))
+        .catch(err => console.log(err))
+})
+
 module.exports = router;

@@ -10,10 +10,10 @@ class OpenProfile extends Component {
             username: '',
             firstname: '',
             lastname: '',
-            description: ''
+            description: '',
+            data: []
         }
     }
-    
     
     getUserProfile = () => {
         const { username } = this.props.match.params;
@@ -26,21 +26,35 @@ class OpenProfile extends Component {
             }))
     }
 
+    async getUserTweets() {
+        const { username } = this.props.match.params;
+        const res = await axios.get(`http://localhost:5000/api/tweets/${username}`)
+        this.setState({ data: res.data })
+    }
+
     componentDidMount() {
         this.getUserProfile();
+        this.getUserTweets();
     }
 
 
     render() { 
-        const { username, firstname, lastname, description } = this.state;
+        const { username, firstname, lastname, description,  } = this.state;
+
+        const tweets = this.state.data.map((tweet, key) =>
+        <li key={tweet._id}>{tweet.text}</li> );
         return ( 
             <div>
                 <h2>{username}'s profil</h2>
 
+                <h3>Användarens info:</h3>
                 <div>Användarnamn: {username}</div>
                 <div>Förnamn: {firstname}</div>
                 <div>Efternamn: {lastname}</div>
                 <div>Beskrivning: {description}</div>
+
+                <h3>Tweets:</h3>
+                <ul>{tweets}</ul>
             </div>
          );
     }
