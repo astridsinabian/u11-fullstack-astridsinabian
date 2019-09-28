@@ -40,6 +40,8 @@ const userSchema = new mongoose.Schema({
         trim: true,
         max: 400
     },
+    followers: [],
+    following: [],
     date: {
         type: Date,
         default: Date.now

@@ -39,10 +39,10 @@ class OpenProfile extends Component {
 
 
     render() { 
-        const { username, firstname, lastname, description,  } = this.state;
+        const { username, firstname, lastname, description } = this.state;
 
         const tweets = this.state.data.map((tweet, key) =>
-        <li key={tweet._id}>{tweet.text}</li> );
+        <li key={tweet._id}>{tweet.text} {tweet.createdAt}</li> );
         return ( 
             <div>
                 <h2>{username}'s profil</h2>

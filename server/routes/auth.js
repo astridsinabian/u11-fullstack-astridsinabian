@@ -96,7 +96,36 @@ router.get('/:username', (req, res) => {
     User.findOne({ 'username': req.params.username }, (err, user) => {
         res.json({ user: user })
     })
-})
+});
+
+router.post('/follow', (req, res) => {
+    const token = req.body.token || req.body.headers.Authorization;
+    if (!token) {
+     return res.status(401).json({message: 'Must pass token'});
+    }
+    
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+        if (err) throw err;
+
+        User.findByIdAndUpdate({
+            '_id': user.id
+            }, {
+                $push: { following: req.body.username }
+            }, { new: true })
+            .then(user => {
+                User.findOneAndUpdate({
+                    'username': req.body.username
+                }, {
+                    $push: {
+                        followers: user.username
+                    }
+                }, { new: true })
+                .then(user => res.json({ user }))
+                .catch(err => console.log(err))  
+            })
+            .catch(err => console.log(err))
+    })
+});
 
 module.exports = router;
 
