@@ -27,7 +27,10 @@ class NavBar extends Component {
 
         if(this.Auth.getToken() !== null) {
             links = ( 
-                <button onClick={this.handleLogout}>Logga ut</button>
+                <div>
+                    <Link to="/profile">Min sida</Link>
+                    <button onClick={this.handleLogout}>Logga ut</button>
+                </div>
             )
         } else {
             links = (
