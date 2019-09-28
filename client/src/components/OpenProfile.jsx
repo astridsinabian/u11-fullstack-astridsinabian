@@ -11,19 +11,23 @@ class OpenProfile extends Component {
             firstname: '',
             lastname: '',
             description: '',
-            data: []
+            data: [],
+            followers: [],
+            following: []
         }
     }
     
-    getUserProfile = () => {
+    async getUserProfile() {
         const { username } = this.props.match.params;
-        axios.get(`http://localhost:5000/api/user/${username}`)
-            .then(res => this.setState({
+        const res = await axios.get(`http://localhost:5000/api/user/${username}`);
+        this.setState({
                 username: res.data.user.username,
                 firstname: res.data.user.firstname,
                 lastname: res.data.user.lastname,
-                description: res.data.user.description
-            }))
+                description: res.data.user.description,
+                followers: res.data.user.followers,
+                following: res.data.user.following
+            })
     }
 
     async getUserTweets() {
@@ -39,13 +43,14 @@ class OpenProfile extends Component {
 
 
     render() { 
-        const { username, firstname, lastname, description } = this.state;
+        const { username, firstname, lastname, description, followers, following } = this.state;
 
         const tweets = this.state.data.map((tweet, key) =>
         <li key={tweet._id}>{tweet.text} {tweet.createdAt}</li> );
         return ( 
             <div>
-                <h2>{username}'s profil</h2>
+                <h2>{username}'s profil </h2>
+                <div>Följare: {followers.length} Följer: {following.length}</div>
 
                 <h3>Användarens info:</h3>
                 <div>Användarnamn: {username}</div>
