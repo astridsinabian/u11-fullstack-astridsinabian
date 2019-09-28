@@ -139,11 +139,11 @@ router.post('/unfollow', (req, res) => {
         User.findByIdAndUpdate({
             '_id': user.id
             }, {
-                $pull: { following: req.body.username }
+                $pull: { following: req.body.data.username }
             }, { new: true })
             .then(user => {
                 User.findOneAndUpdate({
-                    'username': req.body.username
+                    'username': req.body.data.username
                 }, {
                     $pull: {
                         followers: user.username
@@ -153,7 +153,7 @@ router.post('/unfollow', (req, res) => {
                 .catch(err => console.log(err))  
             })
             .catch(err => console.log(err))
-    })
+    });
 });
 
 module.exports = router;

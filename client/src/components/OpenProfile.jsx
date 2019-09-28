@@ -42,9 +42,22 @@ class OpenProfile extends Component {
         
     }
 
-    unfollow(e) {
+    async unfollow(e) {
         e.preventDefault();
-        console.log("avfölj")
+
+        let token = this.Auth.getToken();
+
+        const config = { 
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': token
+            },
+            data: {
+                username: this.state.username
+            }
+        }
+
+        const res = await axios.post('http://localhost:5000/api/user/unfollow', config);
     }
     
     async getUserProfile() {
