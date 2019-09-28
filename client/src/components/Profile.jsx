@@ -51,11 +51,6 @@ class Profile extends Component {
         this.editUser();
     }
 
-    handleLogout = () => {
-        Auth.logout();
-        this.props.history.replace('/login');
-    }
-
     getUser = () => {
         let token = Auth.getToken();
         const config = { 
@@ -103,9 +98,6 @@ class Profile extends Component {
             <Container>
                 <div>
                     <h1>Välkommen {firstname} {lastname}!</h1>
-                    <button onClick={this.handleLogout.bind(this)}>
-                        Logga ut
-                    </button>
                 </div>
 
                 <FormStyled onSubmit={this.onSubmit}>
