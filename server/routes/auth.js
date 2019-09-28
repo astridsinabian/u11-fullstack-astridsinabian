@@ -99,7 +99,6 @@ router.get('/:username', (req, res) => {
 });
 
 router.post('/follow', (req, res) => {
-
     const token = req.body.token || req.body.headers.Authorization;
     if (!token) {
      return res.status(401).json({message: 'Must pass token'});
@@ -118,6 +117,35 @@ router.post('/follow', (req, res) => {
                     'username': req.body.data.username
                 }, {
                     $push: {
+                        followers: user.username
+                    }
+                }, { new: true })
+                .then(user => res.json({ user }))
+                .catch(err => console.log(err))  
+            })
+            .catch(err => console.log(err))
+    })
+});
+
+router.post('/unfollow', (req, res) => {
+    const token = req.body.token || req.body.headers.Authorization;
+    if (!token) {
+     return res.status(401).json({message: 'Must pass token'});
+    }
+
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+        if (err) throw err;
+
+        User.findByIdAndUpdate({
+            '_id': user.id
+            }, {
+                $pull: { following: req.body.username }
+            }, { new: true })
+            .then(user => {
+                User.findOneAndUpdate({
+                    'username': req.body.username
+                }, {
+                    $pull: {
                         followers: user.username
                     }
                 }, { new: true })
