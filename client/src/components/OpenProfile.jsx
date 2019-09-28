@@ -23,9 +23,23 @@ class OpenProfile extends Component {
         this.Auth = new AuthService();
     }
 
-    follow(e) {
+    async follow(e) {
         e.preventDefault();
-        console.log("följ");
+
+        let token = this.Auth.getToken();
+
+        const config = { 
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': token
+            },
+            data: {
+                username: this.state.username
+            }
+        }
+
+        const res = await axios.post('http://localhost:5000/api/user/follow', config);
+        
     }
 
     unfollow(e) {
@@ -99,7 +113,7 @@ class OpenProfile extends Component {
         }
 
         let userInfo;
-        
+
         if(this.getUserProfile && this.getUserTweets) {
             userInfo = (
             <div>

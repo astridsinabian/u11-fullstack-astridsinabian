@@ -99,22 +99,23 @@ router.get('/:username', (req, res) => {
 });
 
 router.post('/follow', (req, res) => {
+
     const token = req.body.token || req.body.headers.Authorization;
     if (!token) {
      return res.status(401).json({message: 'Must pass token'});
     }
-    
+
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) throw err;
 
         User.findByIdAndUpdate({
             '_id': user.id
             }, {
-                $push: { following: req.body.username }
+                $push: { following: req.body.data.username }
             }, { new: true })
             .then(user => {
                 User.findOneAndUpdate({
-                    'username': req.body.username
+                    'username': req.body.data.username
                 }, {
                     $push: {
                         followers: user.username
