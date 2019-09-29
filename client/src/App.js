@@ -9,7 +9,6 @@ import Login from './components/Login';
 import FrontPage from './components/FrontPage';
 import PrivateRoute from './components/PrivateRoute';
 import OpenProfile from './components/OpenProfile';
-import SearchUser from './components/SearchUser';
 
 const Container = styled.div`
   margin: 0;
@@ -27,7 +26,6 @@ class App extends Component {
             <PrivateRoute path="/profile" component={Profile} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
-            <Route path="/user" exact component={SearchUser} />
             <Route path="/user/:username" exact component={OpenProfile} />
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
