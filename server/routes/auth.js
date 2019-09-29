@@ -156,11 +156,5 @@ router.post('/unfollow', (req, res) => {
     });
 });
 
-router.post('/search', (req, res) => {
-    User.findOne({ 'username': req.body.text })
-        .then(user => res.json({ user}))
-        .catch(err => res.status(404).json({ msg: 'User not found' }))
-});
-
 module.exports = router;
 

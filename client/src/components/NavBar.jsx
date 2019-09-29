@@ -17,7 +17,11 @@ class NavBar extends Component {
         this.Auth.logout();
         this.props.history.replace('/login');
     }
-    
+
+    componentDidMount() {
+
+    }
+
     render() { 
         let links;
 
@@ -40,9 +44,7 @@ class NavBar extends Component {
         return ( 
             <div>
                 <Link to="/">Logo</Link>
-                <Link to="/user">Sök</Link>
                 { links }
-                
             </div>
         );
     }
