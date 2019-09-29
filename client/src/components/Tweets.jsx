@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Input, Button } from 'reactstrap';
 import axios from 'axios';
-import AuthService from '../AuthService';
+import AuthService from './AuthService';
 
-class AddTweet extends Component {
+class Tweets extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
             text: '',
-            data: []
+            data: [],
+            following: [],
+            username: ''
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -49,6 +51,21 @@ class AddTweet extends Component {
     }
 
     async getTweets() {
+
+        let token = this.Auth.getToken();
+        const config = { 
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': token
+            }
+        }
+
+        const resFollowing = await axios.get('http://localhost:5000/api/user/profile', config)
+            this.setState({
+                username: resFollowing.data.user.username,
+                following: resFollowing.data.user.following
+            });
+
         const res = await axios.get('http://localhost:5000/api/tweets');
         this.setState({ data: res.data })
     }
@@ -58,8 +75,11 @@ class AddTweet extends Component {
     }
 
     render() { 
-        const tweets = this.state.data.map((tweet, key) =>
-        <li key={tweet._id}>{tweet.text} - av: {tweet.username}</li> );
+        const tweets = this.state.data.map((tweet, key) => {
+            if(this.state.following.includes(tweet.username) || tweet.username === this.state.username) {
+                return <li key={tweet._id}>{tweet.text} - av: {tweet.username}</li>
+            } 
+        })
 
         return ( 
             <div>
@@ -79,15 +99,14 @@ class AddTweet extends Component {
                 </Form>
 
                 <div>
-                <h2>Alla tweets:</h2>
-                <ul>
-                    {tweets}
-                </ul>
-            </div>
-
+                    <h2>Flöde</h2>
+                    <ul>
+                        {tweets}
+                    </ul>
+                </div>
             </div>
          );
     }
 }
  
-export default AddTweet;
+export default Tweets;
