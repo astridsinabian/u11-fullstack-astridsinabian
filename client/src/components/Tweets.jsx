@@ -17,6 +17,7 @@ class Tweets extends Component {
             modal: false,
             retweet: '',
             retweetText: '',
+            retweetsData: []
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -96,7 +97,6 @@ class Tweets extends Component {
 
 
     async getTweets() {
-
         let token = this.Auth.getToken();
         const config = { 
             headers: {
@@ -112,7 +112,10 @@ class Tweets extends Component {
             });
 
         const res = await axios.get('http://localhost:5000/api/tweets');
-        this.setState({ data: res.data })
+        this.setState({ data: res.data });
+
+        const resRetweets = await axios.get('http://localhost:5000/api/tweets/retweets');
+        this.setState({ retweetsData: resRetweets.data });
     }
 
     componentDidMount() {
@@ -120,6 +123,11 @@ class Tweets extends Component {
     }
 
     render() { 
+
+        const retweets = this.state.retweetsData.map((retweet, key) => {
+            return <li key={retweet._id}>{retweet.retweet} / {retweet.retweetText} - av: {retweet.username}</li>
+        })
+        
         const tweets = this.state.data.map((tweet, key) => {
             if(this.state.following.includes(tweet.username) || tweet.username === this.state.username) {
                 return <li key={tweet._id}>{tweet.text} - av: {tweet.username}<button onClick={this.toggle} value={`${tweet.text} - ${tweet.username}`} name="retweet">retweet</button></li>
@@ -162,6 +170,8 @@ class Tweets extends Component {
                 <div>
                     <h2>Flöde</h2>
                     <ul>
+                        
+                        {retweets}
                         {tweets}
                     </ul>
                 </div>

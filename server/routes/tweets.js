@@ -54,7 +54,7 @@ router.post('/retweet', (req,res) => {
                     retweet: req.body.data.retweet,
                     retweetText: req.body.data.retweetText
                 });
-                
+
                 newRetweet.save()
                     .then(retweet => res.json(retweet))
                     .catch(err => console.log(err))
@@ -67,6 +67,13 @@ router.get('/', (req, res) => {
     Tweet.find()
         .sort({ createdAt: -1 })
         .then(tweets => res.json(tweets))
+        .catch(err => console.log(err))
+});
+
+router.get('/retweets', (req, res) => {
+    Retweet.find()
+        .sort({ createdAt: -1 })
+        .then(retweets => res.json(retweets))
         .catch(err => console.log(err))
 });
 
