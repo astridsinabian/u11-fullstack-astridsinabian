@@ -71,6 +71,13 @@ router.get('/', (req, res) => {
         .catch(err => console.log(err))
 });
 
+router.get('/:username', (req, res) => {
+    Tweet.find({ 'username': req.params.username })
+        .sort({ createdAt: -1 })
+        .then(tweets => res.json(tweets))
+        .catch(err => console.log(err))
+})
+
 router.get('/retweets', (req, res) => {
     Retweet.find()
         .sort({ createdAt: -1 })
@@ -78,10 +85,10 @@ router.get('/retweets', (req, res) => {
         .catch(err => console.log(err))
 });
 
-router.get('/:username', (req, res) => {
-    Tweet.find({ 'username': req.params.username })
+router.get('/retweets/:username', (req, res) => {
+    Retweet.find({ 'username': req.params.username })
         .sort({ createdAt: -1 })
-        .then(tweets => res.json(tweets))
+        .then(retweets => res.json(retweets))
         .catch(err => console.log(err))
 })
 

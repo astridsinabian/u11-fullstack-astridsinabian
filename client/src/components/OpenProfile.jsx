@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import axios from 'axios';
 import AuthService from './AuthService';
+import { Link } from 'react-router-dom';
 
 class OpenProfile extends Component {
 
@@ -15,7 +16,8 @@ class OpenProfile extends Component {
             description: '',
             data: [],
             followers: [],
-            following: []
+            following: [],
+            mergedTweets: []
         }
 
         this.follow = this.follow.bind(this);
@@ -79,6 +81,11 @@ class OpenProfile extends Component {
         const { username } = this.props.match.params;
         const res = await axios.get(`http://localhost:5000/api/tweets/${username}`)
         this.setState({ data: res.data })
+
+        const resRetweets = await axios.get(`http://localhost:5000/api/tweets/retweets/${username}`)
+        this.setState({ retweetsData: resRetweets.data })
+
+        this.setState({ mergedTweets: [...this.state.data, ...this.state.retweetsData] });
     }
 
     async userLoggedIn() {
@@ -111,8 +118,22 @@ class OpenProfile extends Component {
     render() { 
         const { username, firstname, lastname, description, followers, following } = this.state;
 
-        const tweets = this.state.data.map((tweet, key) =>
-        <li key={tweet._id}>{tweet.text} {tweet.createdAt}</li> );
+        let retweetButton;
+
+        const mergedTweets = this.state.mergedTweets.sort((a, b) => {
+            if(a.createdAt > b.createdAt) return -1;
+            else if(a.createdAt < b.createdAt) return  1;
+            else return 0;
+        }).map((tweet, key) => {
+            if(this.Auth.getToken() !== null){
+                retweetButton = (<button onClick={this.toggle} value={`${tweet.text} / ${tweet.username}`} name="retweet">retweet</button>);
+            }
+            if(tweet.username === this.state.username && tweet.text !== undefined) {
+                return <li key={tweet._id}>{tweet.text} - av: <Link to={`/user/${tweet.username}`}>{tweet.username}</Link> {retweetButton} skapad: {tweet.createdAt}</li>
+            } else if (tweet.username === this.state.username && tweet.text === undefined) {
+                return <li key={tweet._id}>{tweet.retweetTweet} - av: <Link to={`/user/${tweet.retweetUser}`}>{tweet.retweetUser}</Link> / {tweet.retweetText} - av: <Link to={`/user/${tweet.username}`}>{tweet.username}</Link> skapad: {tweet.createdAt}</li>
+            }
+        });
 
         let followButtons;
 
@@ -143,7 +164,7 @@ class OpenProfile extends Component {
                 <div>Beskrivning: {description}</div>
 
                 <h3>Tweets:</h3>
-                <ul>{tweets}</ul>
+                <ul>{ mergedTweets }</ul>
             </div>
             );
         }
