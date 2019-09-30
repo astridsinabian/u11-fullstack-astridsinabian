@@ -6,7 +6,8 @@ const tweetSchema = new mongoose.Schema({
         ref: 'User'
     }, 
     username: {
-        type: String
+        type: String,
+        trim: true
     },
     text: {
         type: String,

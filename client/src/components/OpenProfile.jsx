@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Button } from 'reactstrap';
 import axios from 'axios';
 import AuthService from './AuthService';
+import { Modal, ModalBody, Form, Input, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 class OpenProfile extends Component {
@@ -17,13 +17,73 @@ class OpenProfile extends Component {
             data: [],
             followers: [],
             following: [],
-            mergedTweets: []
+            mergedTweets: [],
+            retweetTweet: '',
+            retweetUser: '',
+            retweetText: ''
         }
 
         this.follow = this.follow.bind(this);
         this.unfollow = this.unfollow.bind(this);
+        this.toggle = this.toggle.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.retweetSubmit = this.retweetSubmit.bind(this);
         this.Auth = new AuthService();
     }
+
+    toggle(e) {
+        e.preventDefault(e);
+        this.setState(prevState => ({
+          modal: !prevState.modal
+        }));
+
+        const retweetToString = e.target.value;
+        const split = retweetToString.split('/', 2)
+        let retweetTweet = split[0];
+        let retweetUser = split[1];
+
+        this.setState({
+            retweetTweet: retweetTweet,
+            retweetUser: retweetUser
+        })
+      }
+
+      retweetSubmit(e) {
+        e.preventDefault(e);
+        this.addRetweet(this.state.retweetText, this.state.retweetTweet, this.state.retweetUser);
+    }
+
+    handleChange(e) {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+
+    async addRetweet() {
+        let token = this.Auth.getToken();
+        const config = { 
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': token
+            },
+            data: {
+                retweetUser: this.state.retweetUser,
+                retweetTweet: this.state.retweetTweet,
+                retweetText: this.state.retweetText
+            }
+        }
+        const res = await axios.post('http://localhost:5000/api/tweets/retweet', config);
+        this.setState({ 
+            retweetTweet: res.data.retweetTweet,
+            retweetUser: res.data.retweetUser,
+            retweetText: res.data.retweetText
+        });
+
+        this.setState({ modal: false });
+
+        
+    }
+
 
     async follow(e) {
         e.preventDefault();
@@ -171,6 +231,22 @@ class OpenProfile extends Component {
         
         return ( 
             <div>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                    <ModalBody>
+                        <Form onSubmit={this.retweetSubmit}>
+                            <Input 
+                                onChange={this.handleChange}
+                                type="textarea"
+                                value={this.state.retweetText}
+                                name="retweetText"
+                            />
+                            <div>{this.state.retweetTweet} - av: {this.state.retweetUser}</div>
+                            <Button color="primary">Retweet</Button>
+                        </Form>
+                            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                    </ModalBody>
+                </Modal>
+
                 { userInfo }
             </div>
          );

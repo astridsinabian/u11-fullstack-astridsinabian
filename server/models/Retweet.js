@@ -6,10 +6,12 @@ const retweetSchema = new mongoose.Schema({
         ref: 'User'
     }, 
     username: {
-        type: String
+        type: String,
+        trim: true
     },
     retweetUser: {
-        type: String
+        type: String,
+        trim: true
     },
     retweetTweet: {
         type: String

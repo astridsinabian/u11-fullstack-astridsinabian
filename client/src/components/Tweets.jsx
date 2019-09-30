@@ -104,7 +104,9 @@ class Tweets extends Component {
             retweetText: res.data.retweetText
         });
 
-        this.setState({ retweetText: '' });
+        this.setState({ modal: false });
+
+        this.getTweets();
     }
 
 
@@ -126,10 +128,10 @@ class Tweets extends Component {
         const res = await axios.get('http://localhost:5000/api/tweets')
             this.setState({ data: res.data });
 
-        const resRetweets = await axios.get('http://localhost:5000/api/tweets/retweets')
+        const resRetweets = await axios.get('http://localhost:5000/api/tweets/retweets/retweets')
             this.setState({ retweetsData: resRetweets.data });
 
-            this.setState({ mergedTweets: [...this.state.data, ...this.state.retweetsData] })
+            this.setState({ mergedTweets: [...this.state.data, ...this.state.retweetsData] });
     }
 
     componentDidMount() {
@@ -138,7 +140,7 @@ class Tweets extends Component {
 
     render() { 
 
-        const mergedTweets = this.state.mergedTweets.sort((a, b) => {
+        const merged = this.state.mergedTweets.sort((a, b) => {
             if(a.createdAt > b.createdAt) return -1;
             else if(a.createdAt < b.createdAt) return  1;
             else return 0;
@@ -186,7 +188,7 @@ class Tweets extends Component {
                 <div>
                     <h2>Flöde</h2>
                     <ul>
-                        {mergedTweets}
+                        { merged }
                     </ul>
                 </div>
             </div>

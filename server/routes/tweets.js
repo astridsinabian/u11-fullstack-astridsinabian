@@ -78,7 +78,8 @@ router.get('/:username', (req, res) => {
         .catch(err => console.log(err))
 })
 
-router.get('/retweets', (req, res) => {
+router.get('/retweets/retweets', (req, res) => {
+    debugger;
     Retweet.find()
         .sort({ createdAt: -1 })
         .then(retweets => res.json(retweets))
