@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const tweetSchema = new mongoose.Schema({
+const retweetSchema = new mongoose.Schema({
     publisher: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -9,7 +9,14 @@ const tweetSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    text: {
+    retweetUser: {
+        type: String,
+        trim: true
+    },
+    retweetTweet: {
+        type: String
+    },
+    retweetText: {
         type: String,
         max: 400
     },
@@ -19,4 +26,4 @@ const tweetSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Tweet', tweetSchema);
+module.exports = mongoose.model('Retweet', retweetSchema);

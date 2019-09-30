@@ -44,6 +44,7 @@ class NavBar extends Component {
         return ( 
             <div>
                 <Link to="/">Logo</Link>
+                <Link to="/user">Sök</Link>
                 { links }
             </div>
         );
