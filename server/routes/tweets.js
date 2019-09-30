@@ -51,7 +51,8 @@ router.post('/retweet', (req,res) => {
                 const newRetweet = new Retweet({
                     publisherID: user.id,
                     username: user.username,
-                    retweet: req.body.data.retweet,
+                    retweetUser: req.body.data.retweetUser,
+                    retweetTweet: req.body.data.retweetTweet,
                     retweetText: req.body.data.retweetText
                 });
 

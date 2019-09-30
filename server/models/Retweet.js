@@ -8,7 +8,10 @@ const retweetSchema = new mongoose.Schema({
     username: {
         type: String
     },
-    retweet: {
+    retweetUser: {
+        type: String
+    },
+    retweetTweet: {
         type: String
     },
     retweetText: {

@@ -3,6 +3,7 @@ import { Form, FormGroup, Input, Button } from 'reactstrap';
 import axios from 'axios';
 import AuthService from './AuthService';
 import { Modal, ModalBody } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 class Tweets extends Component {
 
@@ -15,7 +16,8 @@ class Tweets extends Component {
             following: [],
             username: '',
             modal: false,
-            retweet: '',
+            retweetUser: '',
+            retweetTweet: '',
             retweetText: '',
             retweetsData: []
         }
@@ -45,14 +47,21 @@ class Tweets extends Component {
           modal: !prevState.modal
         }));
 
+        const retweetToString = e.target.value;
+        const split = retweetToString.split('/', 2)
+        let retweetTweet = split[0];
+        let retweetUser = split[1];
+
         this.setState({
-            retweet: e.target.value
+            retweetTweet: retweetTweet,
+            retweetUser: retweetUser
         })
+
       }
 
     retweetSubmit(e) {
         e.preventDefault(e);
-        this.addRetweet(this.state.retweetText, this.state.retweet);
+        this.addRetweet(this.state.retweetText, this.state.retweetTweet, this.state.retweetUser);
     }
 
     async addTweet() {
@@ -82,13 +91,15 @@ class Tweets extends Component {
                 'Authorization': token
             },
             data: {
-                retweet: this.state.retweet,
+                retweetUser: this.state.retweetUser,
+                retweetTweet: this.state.retweetTweet,
                 retweetText: this.state.retweetText
             }
         }
         const res = await axios.post('http://localhost:5000/api/tweets/retweet', config);
         this.setState({ 
-            retweet: res.data.retweet,
+            retweetTweet: res.data.retweetTweet,
+            retweetUser: res.data.retweetUser,
             retweetText: res.data.retweetText
         });
 
@@ -116,6 +127,8 @@ class Tweets extends Component {
 
         const resRetweets = await axios.get('http://localhost:5000/api/tweets/retweets');
         this.setState({ retweetsData: resRetweets.data });
+
+        console.log(this.state.retweetsData);
     }
 
     componentDidMount() {
@@ -125,12 +138,12 @@ class Tweets extends Component {
     render() { 
 
         const retweets = this.state.retweetsData.map((retweet, key) => {
-            return <li key={retweet._id}>{retweet.retweet} / {retweet.retweetText} - av: {retweet.username}</li>
+            return <li key={retweet._id}>{retweet.retweetTweet} - av: <Link to={`/user/${retweet.retweetUser}`}>{retweet.retweetUser}</Link> / {retweet.retweetText} - av: <Link to={`/user/${retweet.username}`}>{retweet.username}</Link></li>
         })
         
         const tweets = this.state.data.map((tweet, key) => {
             if(this.state.following.includes(tweet.username) || tweet.username === this.state.username) {
-                return <li key={tweet._id}>{tweet.text} - av: {tweet.username}<button onClick={this.toggle} value={`${tweet.text} - ${tweet.username}`} name="retweet">retweet</button></li>
+                return <li key={tweet._id}>{tweet.text} - av: <Link to={`/user/${tweet.username}`}>{tweet.username}</Link><button onClick={this.toggle} value={`${tweet.text} / ${tweet.username}`} name="retweet">retweet</button></li>
             } 
         })
 
@@ -160,7 +173,7 @@ class Tweets extends Component {
                                 value={this.state.retweetText}
                                 name="retweetText"
                             />
-                            <div>{this.state.retweet}</div>
+                            <div>{this.state.retweetTweet} - av: {this.state.retweetUser}</div>
                             <Button color="primary">Retweet</Button>
                         </Form>
                             <Button color="secondary" onClick={this.toggle}>Cancel</Button>
@@ -170,7 +183,6 @@ class Tweets extends Component {
                 <div>
                     <h2>Flöde</h2>
                     <ul>
-                        
                         {retweets}
                         {tweets}
                     </ul>
