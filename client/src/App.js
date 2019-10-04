@@ -10,6 +10,7 @@ import FrontPage from './components/FrontPage';
 import PrivateRoute from './components/PrivateRoute';
 import OpenProfile from './components/OpenProfile';
 import SearchUser from './components/SearchUser';
+import Admin from './components/Admin';
 
 const Container = styled.div`
   margin: 0;
@@ -25,6 +26,7 @@ class App extends Component {
           <Switch>
             <Route path="/" exact component={FrontPage} />
             <PrivateRoute path="/profile" component={Profile} />
+            <PrivateRoute path="/admin" component={Admin} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
             <Route path="/user" exact component={SearchUser} />

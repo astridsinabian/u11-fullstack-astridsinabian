@@ -6,6 +6,7 @@ const { registerValidation, loginValidation } = require('../validation');
 // const verifyToken = require('./verifyToken');
 
 router.post('/register', async (req, res) => {
+    debugger;
     const { error } = registerValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -21,9 +22,10 @@ router.post('/register', async (req, res) => {
         lastname: req.body.lastname,
         email: req.body.email,
         password: hashedPassword, 
-        description: req.body.description
+        description: req.body.description,
+        admin: req.body.admin
     });
- 
+    debugger;
     try {
         const savedUser = await user.save();
         res.send({user: user._id});
@@ -43,8 +45,17 @@ router.post('/login', async (req, res) => {
     const validPassword = await bcrypt.compare(req.body.user.password, user.password);
     if(!validPassword) return res.status(400).send('Invalid password');
 
-    const token = jwt.sign({id: user._id, username: req.body.user.username}, process.env.TOKEN_SECRET, { expiresIn: '1h' });
-    res.header('auth-token', token).send(token);
+    try {
+        const token = jwt.sign({id: user._id, username: req.body.user.username}, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+        return res.status(200).send({
+            token: token,
+            admin: user.admin
+          });
+      
+    } catch(err) {
+        res.status(400).send(err);
+    }
+   
 });
 
 router.get('/profile', function(req, res) {
@@ -52,6 +63,7 @@ router.get('/profile', function(req, res) {
     if (!token) {
      return res.status(401).json({message: 'Must pass token'});
     }
+
     jwt.verify(token, process.env.TOKEN_SECRET, function(err, user) {
         if (err) throw err;
         User.findById({

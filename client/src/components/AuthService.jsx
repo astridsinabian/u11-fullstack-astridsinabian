@@ -25,8 +25,16 @@ export default class AuthService extends Component {
         return !!token;
     }
 
+    setRole = (admin) => {
+        return localStorage.setItem('admin', admin)
+    }
+
     setToken = (idToken) => {
         return localStorage.setItem('auth-token', idToken);
+    }
+
+    isAdmin = () => {
+        return localStorage.getItem('admin');
     }
 
     getToken = () => {
@@ -34,6 +42,6 @@ export default class AuthService extends Component {
     }
 
     logout = () => {
-        return localStorage.removeItem('auth-token');
+        return localStorage.removeItem('auth-token'), localStorage.removeItem('admin');
     }
 }

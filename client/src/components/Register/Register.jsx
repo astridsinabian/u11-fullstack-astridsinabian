@@ -15,7 +15,8 @@ class Register extends Component {
             lastname: '',
             email: '',
             password: '',
-            description: ''
+            description: '',
+            admin: 'false'
         }
 
         this.onChange = this.onChange.bind(this);
@@ -44,8 +45,8 @@ class Register extends Component {
 
     render() { 
         const { step } = this.state;
-        const { username, firstname, lastname, email, password, description } = this.state;
-        const values = { username, firstname, lastname, email, password, description };
+        const { username, firstname, lastname, email, password, description, admin } = this.state;
+        const values = { username, firstname, lastname, email, password, description, admin };
 
         switch(step) { 
             case 1:
