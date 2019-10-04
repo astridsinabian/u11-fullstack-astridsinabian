@@ -174,11 +174,5 @@ router.post('/search', (req, res) => {
         .catch(err => res.status(404).json({ msg: 'User not found' }))
 });
 
-router.get('/admin/users', (req, res) => {
-    User.find()
-        .then(users => res.json(users))
-        .catch(err => res.json(err));
-});
-
 module.exports = router;
 

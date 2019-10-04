@@ -16,7 +16,7 @@ class Admin extends Component {
     }
 
     getUsers = () => {
-        axios.get('http://localhost:5000/api/user/admin/users')
+        axios.get('http://localhost:5000/api/admin/users')
             .then(res => this.setState({
                 users: res.data
             }))
