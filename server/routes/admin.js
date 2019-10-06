@@ -7,16 +7,15 @@ router.get('/users', (req, res) => {
         .catch(err => res.json(err));
 });
 
-router.patch('/editUsers', (req, res) => {
+router.patch('/editUser', (req, res) => {
     User.findByIdAndUpdate({
-        '_id': req.body._id
+        '_id': req.body.user._id
         }, {
-            "firstname": req.body.firstname,
-            "lastname": req.body.lastname,
-            "email": req.body.email
+            "firstname": req.body.user.firstname,
+            "lastname": req.body.user.lastname,
+            "email": req.body.user.email
         }, { new: true },
         (err, user) => {
-            debugger;
             if(err) {
                 res.json({ status: "error", message: `${err}` });
             }
