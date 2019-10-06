@@ -11,11 +11,7 @@ class Admin extends Component {
 
         this.state = {
             users: [],
-            modal: false,
-            firstname: '',
-            lastname: '',
-            email: '',
-            admin: ''
+            modal: false
         };
 
         this.toggle = this.toggle.bind(this);
@@ -26,7 +22,7 @@ class Admin extends Component {
 
     onSubmit(e) {
         e.preventDefault(e);
-        this.editUser(this.state.newFirstname, this.state.newLastname, this.state.newEmail);
+        this.editUser(this.state.newFirstname, this.state.newLastname, this.state.newEmail, this.state.admin);
     }
 
     handleChange(e) {
@@ -42,17 +38,19 @@ class Admin extends Component {
         }));
 
         const valueToSplit = e.target.value;
-        const split = valueToSplit.split('/', 4);
+        const split = valueToSplit.split('/', 5);
         let newFirstname = split[0];
         let newLastname = split[1];
         let newEmail = split[2];
         let id = split[3];
+        let admin = split[4];
 
         this.setState({
             id: id,
             newFirstname: newFirstname,
             newLastname: newLastname,
-            newEmail: newEmail
+            newEmail: newEmail,
+            admin: admin
         })
     }
 
@@ -72,9 +70,15 @@ class Admin extends Component {
             firstname: this.state.newFirstname,
             lastname: this.state.newLastname,
             email: this.state.newEmail,
+            admin: this.state.admin
             }
 
         axios.patch('http://localhost:5000/api/admin/editUser', { user });
+    }
+
+    deleteUser = (e) => {
+        e.preventDefault();
+        console.log("ta bort användare");
     }
 
     componentDidMount() {
@@ -94,12 +98,12 @@ class Admin extends Component {
                     {this.state.users.map((user, key) => {
 
                         const role = (
-                            user.admin === true ?
+                            user.admin ?
                             "Admin" : "Vanlig användare"
                         );
 
                         return <div style={{margin: '2em'}} key={user._id}>
-                        {user.firstname} {user.lastname} <Button color="primary" onClick={this.toggle} value={user.firstname + ' / ' + user.lastname + ' / ' + user.email + ' / ' + user._id}>Ändra</Button>
+                        {user.firstname} {user.lastname} <Button color="primary" onClick={this.toggle} value={user.firstname + ' / ' + user.lastname + ' / ' + user.email + ' / ' + user._id + ' / ' + user.admin}>Ändra</Button> <Button color="danger" onClick={this.deleteUser} value={user._id}>Ta bort</Button>
                         
                         <div>
                             <div><strong>Användarnamn: </strong>{user.username}</div>

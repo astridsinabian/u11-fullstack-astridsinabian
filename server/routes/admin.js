@@ -24,4 +24,17 @@ router.patch('/editUser', (req, res) => {
     );
 });
 
+router.delete('/deleteUser', (req, res) => {
+    User.findByIdAndRemove({
+        '_id': req.body._id
+        },
+        (err, user) => {
+            if(err) {
+                res.json({ status: "error", message: `${err}` });
+            }
+            res.status(200).json(user);
+        }
+    );
+});
+
 module.exports = router;
