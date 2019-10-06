@@ -14,7 +14,8 @@ class Admin extends Component {
             modal: false,
             firstname: '',
             lastname: '',
-            email: ''
+            email: '',
+            admin: ''
         };
 
         this.toggle = this.toggle.bind(this);
@@ -91,12 +92,19 @@ class Admin extends Component {
                     <h2>Admin - Översikt</h2>
                     <div>
                     {this.state.users.map((user, key) => {
-                        return <div key={user._id}>
+
+                        const role = (
+                            user.admin === true ?
+                            "Admin" : "Vanlig användare"
+                        );
+
+                        return <div style={{margin: '2em'}} key={user._id}>
                         {user.firstname} {user.lastname} <Button color="primary" onClick={this.toggle} value={user.firstname + ' / ' + user.lastname + ' / ' + user.email + ' / ' + user._id}>Ändra</Button>
                         
                         <div>
                             <div><strong>Användarnamn: </strong>{user.username}</div>
                             <div><strong>Email:</strong>{user.email}</div>
+                            <div><strong>Roll:</strong> {role}</div>
                         </div>
                         
                     </div>
