@@ -4,6 +4,7 @@ import FormUserDetails from './FormUserDetails';
 import FormDescription from './FormDescription';
 import Confirm from './Confirm';
 import Success from './Success';
+import { Redirect } from 'react-router-dom';
 
 class Register extends Component {
     constructor(props) {
@@ -48,36 +49,41 @@ class Register extends Component {
         const { username, firstname, lastname, email, password, description, admin } = this.state;
         const values = { username, firstname, lastname, email, password, description, admin };
 
-        switch(step) { 
-            case 1:
-            return (
-                <FormUserDetails
-                    nextStep={this.nextStep}
-                    onChange={this.onChange}
-                    values={values}
-                />
-            );
-            case 2:
+        if(localStorage.getItem('auth-token') !== null) {
+            return <Redirect to="/profile" />
+        } else {
+
+            switch(step) { 
+                case 1:
                 return (
-                    <FormDescription
+                    <FormUserDetails
                         nextStep={this.nextStep}
-                        prevStep={this.prevStep}
                         onChange={this.onChange}
                         values={values}
                     />
                 );
-            case 3:
-                return (
-                    <Confirm 
-                        nextStep={this.nextStep}
-                        prevStep={this.prevStep}
-                        values={values} 
-                    />
-                );
-            case 4:
-                return (
-                    <Success />
-                );
+                case 2:
+                    return (
+                        <FormDescription
+                            nextStep={this.nextStep}
+                            prevStep={this.prevStep}
+                            onChange={this.onChange}
+                            values={values}
+                        />
+                    );
+                case 3:
+                    return (
+                        <Confirm 
+                            nextStep={this.nextStep}
+                            prevStep={this.prevStep}
+                            values={values} 
+                        />
+                    );
+                case 4:
+                    return (
+                        <Success />
+                    );
+            }
         }
     }
 }
