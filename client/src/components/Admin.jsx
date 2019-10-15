@@ -24,7 +24,12 @@ class Admin extends Component {
         e.preventDefault(e);
 
         this.editUser(this.state.newFirstname, this.state.newLastname, this.state.newEmail, this.newAdmin);
-        
+
+        this.setState({
+            modal: false
+        })
+
+        this.getUsers();
     }
 
     handleChange(e) {
@@ -67,12 +72,11 @@ class Admin extends Component {
         }
     }
 
-    getUsers = () => {
-        axios.get('http://localhost:5000/api/admin/users')
-            .then(res => this.setState({
+    async getUsers() {
+        const res = await axios.get('http://localhost:5000/api/admin/users');
+            this.setState({
                 users: res.data
-            }))
-            .catch(err => console.log(err));
+            })
     }
 
     editUser = () => {
@@ -91,11 +95,11 @@ class Admin extends Component {
 
     deleteUser = (e) => {
         e.preventDefault();
-        debugger;
-        const _id = e.target.value.trim();
-        const user = { _id: _id }
+        const id = e.target.value.trim();
 
-        axios.delete('http://localhost:5000/api/admin/deleteUser', { user }); 
+        axios.delete(`http://localhost:5000/api/admin/deleteUser/${id}`);
+
+        this.getUsers();
     }
 
     componentDidMount() {

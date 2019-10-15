@@ -25,16 +25,13 @@ router.patch('/editUser', (req, res) => {
     );
 });
 
-router.delete('/deleteUser', (req, res) => {
-    debugger;
-    User.findByIdAndRemove({
-        '_id': req.body.user._id
-        },
-        (err, user) => {
+router.delete('/deleteUser/:id', (req, res) => {
+    User.findByIdAndRemove({'_id': req.params.id},
+        err => {
             if(err) {
                 res.json({ status: "error", message: `${err}` });
             }
-            res.status(200).json("Borta!");
+            res.status(200).json("Removed!");
         }
     );
 });
