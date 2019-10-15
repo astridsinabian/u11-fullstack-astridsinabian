@@ -32,7 +32,8 @@ class Profile extends Component {
             firstname: '',
             lastname: '',
             email: '',
-            description: ''
+            description: '',
+            admin: false
         }
 
         this.handleChange = this.handleChange.bind(this);

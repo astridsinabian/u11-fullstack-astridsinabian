@@ -8,6 +8,7 @@ const port = process.env.PORT || 5000;
 
 const authRoute = require('./routes/auth');
 const tweets = require('./routes/tweets');
+const adminRoute = require('./routes/admin');
 
 // Configures enviroment varibles in dotenv-file
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(express.json());
 // Route middlewares
 app.use('/api/user', authRoute);
 app.use('/api/tweets', tweets);
+app.use('/api/admin', adminRoute);
 
 // What starts the server
 app.listen(port, () => {

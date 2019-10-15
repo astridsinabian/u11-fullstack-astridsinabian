@@ -32,8 +32,14 @@ class Login extends Component {
         };
         axios.post('http://localhost:5000/api/user/login', { user })
             .then(res => {
-                this.Auth.setToken(res.data);
-                this.props.history.push('/profile');
+                this.Auth.setToken(res.data.token);
+                this.Auth.setRole(res.data.admin);
+
+                if(this.Auth.isAdmin() === 'true') {
+                    this.props.history.push('/admin');
+                } else {
+                    this.props.history.push('/profile');
+                }
             })
             .catch((res) => console.log(res));
     }
