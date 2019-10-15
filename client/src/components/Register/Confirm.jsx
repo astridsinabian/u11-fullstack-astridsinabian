@@ -11,7 +11,6 @@ export class Confirm extends Component {
     }
 
     continue = e => {
-        debugger;
         e.preventDefault();
         this.Auth.register(this.props.values);
         this.props.nextStep();

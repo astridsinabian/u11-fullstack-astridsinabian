@@ -6,7 +6,6 @@ const { registerValidation, loginValidation } = require('../validation');
 // const verifyToken = require('./verifyToken');
 
 router.post('/register', async (req, res) => {
-    debugger;
     const { error } = registerValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -25,7 +24,7 @@ router.post('/register', async (req, res) => {
         description: req.body.description,
         admin: req.body.admin
     });
-    debugger;
+
     try {
         const savedUser = await user.save();
         res.send({user: user._id});

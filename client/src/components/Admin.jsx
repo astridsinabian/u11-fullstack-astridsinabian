@@ -11,12 +11,18 @@ class Admin extends Component {
 
         this.state = {
             users: [],
-            modal: false
+            modal: false,
+            username: '',
+            firstname: '',
+            lastname: '',
+            email: '',
+            password: ''
         };
 
         this.toggle = this.toggle.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.createNewUser = this.createNewUser.bind(this);
         this.Auth = new AuthService();
     }
 
@@ -30,6 +36,20 @@ class Admin extends Component {
         })
 
         this.getUsers();
+    }
+
+    createNewUser(e) {
+        e.preventDefault(e);
+
+        const user = {  
+            username: this.state.username,
+            firstname: this.state.firstname,
+            lastname: this.state.lastname,
+            email: this.state.email,
+            password: this.state.password
+        }
+        
+        this.Auth.register(user);
     }
 
     handleChange(e) {
@@ -202,6 +222,77 @@ class Admin extends Component {
                         </Form>
                     </ModalBody>
                     </Modal>
+
+                    <hr />
+
+                    <div style={{margin: '2em'}}>
+                        <h5>Skapa ny användare:</h5>
+
+                        <Form onSubmit={this.createNewUser}>
+                        <FormGroup>
+                            <Label>Användarnamn</Label>
+                            <Input 
+                                onChange={this.handleChange}
+                                value={this.state.username}
+                                type="text" 
+                                name="username" 
+                                id="username" 
+                                placeholder="Användarnamn"
+                            />
+                        </FormGroup>
+
+                        <div style={{display: 'flex', }}>
+                            <FormGroup>
+                                <Label>Förnamn</Label>
+                                <Input 
+                                    onChange={this.handleChange} 
+                                    value={this.state.firstname}
+                                    type="name"
+                                    name="firstname"
+                                    id="firstname"
+                                    placeholder="Förnamn" 
+                                />
+                            </FormGroup>
+                            
+                            <FormGroup>
+                                <Label>Efternamn</Label>
+                                <Input
+                                    onChange={this.handleChange} 
+                                    value={this.state.lastname}
+                                    type="name"
+                                    name="lastname" 
+                                    id="lastname" 
+                                    placeholder="Efternamn" 
+                                />
+                            </FormGroup>
+                        </div>
+
+                        <FormGroup>
+                            <Label>Email</Label>
+                            <Input 
+                                onChange={this.handleChange} 
+                                value={this.state.email}
+                                type="email" 
+                                name="email" 
+                                id="email" 
+                                placeholder="Email" 
+                            />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label>Lösenord</Label>
+                            <Input 
+                                onChange={this.handleChange} 
+                                value={this.state.password}
+                                type="password" 
+                                name="password" 
+                                id="password" 
+                                placeholder="Lösenord" 
+                            />
+                        </FormGroup>
+                        <Button>Skapa</Button>
+                    </Form>
+                    </div>
 
                 </div>
             );
