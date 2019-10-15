@@ -18,14 +18,18 @@ class NavBar extends Component {
         this.props.history.replace('/login');
     }
 
-    componentDidMount() {
-
-    }
-
     render() { 
         let links;
 
-        if(this.Auth.getToken() !== null) {
+        if(this.Auth.getToken() !== null && localStorage.getItem('admin') === 'true') {
+            links = (
+                <div>
+                    <Link to="/profile">Min sida</Link>
+                    <Link to="/admin">Dashboard</Link>
+                    <button onClick={this.handleLogout}>Logga ut</button>
+                </div>
+            )
+        } else if(this.Auth.getToken() !== null) {
             links = ( 
                 <div>
                     <Link to="/profile">Min sida</Link>
@@ -39,6 +43,7 @@ class NavBar extends Component {
                     <Link to="/register">Registrera dig</Link>
                 </div>
             )
+            
         }
 
         return ( 

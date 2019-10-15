@@ -50,6 +50,16 @@ class Admin extends Component {
         }
         
         this.Auth.register(user);
+
+        this.setState({ 
+            username: '',
+            firstname: '',
+            lastname: '',
+            email: '',
+            password: ''
+        })
+
+        this.getUsers();
     }
 
     handleChange(e) {
