@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AuthService from './AuthService';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, CustomInput} from 'reactstrap';
 
 class Admin extends Component {
 
@@ -22,7 +22,9 @@ class Admin extends Component {
 
     onSubmit(e) {
         e.preventDefault(e);
-        this.editUser(this.state.newFirstname, this.state.newLastname, this.state.newEmail, this.state.admin);
+
+        this.editUser(this.state.newFirstname, this.state.newLastname, this.state.newEmail, this.newAdmin);
+        
     }
 
     handleChange(e) {
@@ -37,21 +39,32 @@ class Admin extends Component {
           modal: !prevState.modal
         }));
 
-        const valueToSplit = e.target.value;
-        const split = valueToSplit.split('/', 5);
-        let newFirstname = split[0];
-        let newLastname = split[1];
-        let newEmail = split[2];
-        let id = split[3];
-        let admin = split[4];
+        if(e.target.value === undefined) {
+            return;
+        } else {
+            
+            const valueToSplit = e.target.value;
+            const split = valueToSplit.split('/', 5);
+            let newFirstname = split[0];
+            let newLastname = split[1];
+            let newEmail = split[2];
+            let id = split[3];
+            let admin = split[4];
+    
+            if(admin === undefined) {
+                return;
+            } else {
+                let newAdmin = admin.trim();
 
-        this.setState({
-            id: id,
-            newFirstname: newFirstname,
-            newLastname: newLastname,
-            newEmail: newEmail,
-            admin: admin
-        })
+                this.setState({
+                    id: id,
+                    newFirstname: newFirstname,
+                    newLastname: newLastname,
+                    newEmail: newEmail,
+                    newAdmin: newAdmin
+                })
+            }
+        }
     }
 
     getUsers = () => {
@@ -70,7 +83,7 @@ class Admin extends Component {
             firstname: this.state.newFirstname,
             lastname: this.state.newLastname,
             email: this.state.newEmail,
-            admin: this.state.admin
+            admin: this.state.newAdmin
             }
 
         axios.patch('http://localhost:5000/api/admin/editUser', { user });
@@ -78,7 +91,11 @@ class Admin extends Component {
 
     deleteUser = (e) => {
         e.preventDefault();
-        console.log("ta bort användare");
+        debugger;
+        const _id = e.target.value.trim();
+        const user = { _id: _id }
+
+        axios.delete('http://localhost:5000/api/admin/deleteUser', { user }); 
     }
 
     componentDidMount() {
@@ -108,7 +125,9 @@ class Admin extends Component {
                         <div>
                             <div><strong>Användarnamn: </strong>{user.username}</div>
                             <div><strong>Email:</strong>{user.email}</div>
-                            <div><strong>Roll:</strong> {role}</div>
+                            <div>
+                                <strong>Roll:</strong> {role}
+                            </div>
                         </div>
                         
                     </div>
@@ -117,7 +136,7 @@ class Admin extends Component {
 
                     
                     <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Ändra X uppgifter</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Ändra {this.state.newFirstname}'s uppgifter</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.onSubmit}>
                         <FormGroup>
@@ -149,6 +168,30 @@ class Admin extends Component {
                                 name="newEmail"
                                 id="newEmail"
                             />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label>Ändra roll:</Label>
+                            
+                            <div style={{display: 'flex'}}>
+                                <h6>Admin</h6>
+                                <input
+                                    onChange={this.handleChange}
+                                    value="true"
+                                    type="radio"
+                                    name="newAdmin"
+                                    id="newAdmin"
+                                />
+
+                                <h6>Vanlig användare</h6>
+                                <input
+                                    onChange={this.handleChange}
+                                    value="false"
+                                    type="radio"
+                                    name="newAdmin"
+                                    id="newAdmin"
+                                />
+                            </div>
                         </FormGroup>
                         <Button color="primary">Ändra</Button>
                         <Button color="secondary" onClick={this.toggle}>Avbryt</Button>

@@ -13,7 +13,8 @@ router.patch('/editUser', (req, res) => {
         }, {
             "firstname": req.body.user.firstname,
             "lastname": req.body.user.lastname,
-            "email": req.body.user.email
+            "email": req.body.user.email,
+            "admin": req.body.user.admin
         }, { new: true },
         (err, user) => {
             if(err) {
@@ -25,14 +26,15 @@ router.patch('/editUser', (req, res) => {
 });
 
 router.delete('/deleteUser', (req, res) => {
+    debugger;
     User.findByIdAndRemove({
-        '_id': req.body._id
+        '_id': req.body.user._id
         },
         (err, user) => {
             if(err) {
                 res.json({ status: "error", message: `${err}` });
             }
-            res.status(200).json(user);
+            res.status(200).json("Borta!");
         }
     );
 });
