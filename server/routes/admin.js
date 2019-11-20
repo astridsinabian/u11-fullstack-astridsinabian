@@ -1,10 +1,26 @@
 const router = require('express').Router();
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
 router.get('/users', (req, res) => {
-    User.find()
-        .then(users => res.json(users))
-        .catch(err => res.json(err));
+    const token = req.body.token || req.headers.authorization;
+
+    if (!token) {
+      return res.status(401).json({message: 'Must pass token'});
+    }
+
+    try {
+        jwt.verify(token, process.env.TOKEN_SECRET, function(error, user) {
+            if (error) throw error;
+            User.find()
+                .then(users => res.json(users))
+                .catch(err => res.json(err));
+        });
+    } catch(error) {
+        if (error.name === 'TokenExpiredError') {
+            return res.status(403).json({message: 'jwt expired'});
+        }
+    }
 });
 
 router.patch('/editUser', (req, res) => {

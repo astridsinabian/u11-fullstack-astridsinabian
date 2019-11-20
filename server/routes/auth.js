@@ -54,28 +54,34 @@ router.post('/login', async (req, res) => {
     } catch(err) {
         res.status(400).send(err);
     }
-   
 });
 
 router.get('/profile', function(req, res) {
     const token = req.body.token || req.headers.authorization;
+
     if (!token) {
      return res.status(401).json({message: 'Must pass token'});
     }
 
-    jwt.verify(token, process.env.TOKEN_SECRET, function(err, user) {
-        if (err) throw err;
-        User.findById({
-            '_id': user.id
-            }, function(err, user) {
-                if (user.id.match(/^[0-9a-fA-F]{24}$/)) {
-                if (err) throw err;
-                res.json({
-                    user: user
-                });
-            }
+    try {
+        jwt.verify(token, process.env.TOKEN_SECRET, function(err, user) {
+            if (err) throw err;
+            User.findById({
+                '_id': user.id
+                }, function(err, user) {
+                    if (user.id.match(/^[0-9a-fA-F]{24}$/)) {
+                    if (err) throw err;
+                    res.json({
+                        user: user
+                    });
+                }
+            });
         });
-    });
+    } catch(error) {
+        if (error.name === 'TokenExpiredError') {
+            return res.status(403).json({message: 'jwt expired'});
+        }
+    }  
 });
 
 router.patch('/profile', (req, res) => {
