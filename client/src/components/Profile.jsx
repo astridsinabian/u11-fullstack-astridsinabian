@@ -60,15 +60,20 @@ class Profile extends Component {
                     'Authorization': token
                 }
             }
-
         axios.get('http://localhost:5000/api/user/profile', config)
-        .then(res => this.setState({
-            username: res.data.user.username,
-            firstname: res.data.user.firstname,
-            lastname: res.data.user.lastname,
-            email: res.data.user.email,
-            description: res.data.user.description
-        }));
+            .then(res => this.setState({
+                username: res.data.user.username,
+                firstname: res.data.user.firstname,
+                lastname: res.data.user.lastname,
+                email: res.data.user.email,
+                description: res.data.user.description,
+            }))
+            .catch((error) => { 
+                if(error.response.data.message === 'jwt expired') {
+                    this.Auth.logout();
+                    this.props.history.replace('/login');
+                }
+            });
     }
 
     editUser = () => {

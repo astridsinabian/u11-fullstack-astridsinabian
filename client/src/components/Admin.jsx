@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AuthService from './AuthService';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, CustomInput} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input } from 'reactstrap';
 
 class Admin extends Component {
 
@@ -102,11 +102,25 @@ class Admin extends Component {
         }
     }
 
-    async getUsers() {
-        const res = await axios.get('http://localhost:5000/api/admin/users');
-            this.setState({
-                users: res.data
-            })
+    getUsers = () => {
+        let token = this.Auth.getToken();
+        const config = { 
+                headers: {
+                    'Content-Type': "application/json",
+                    'Authorization': token
+                }
+            }
+
+        axios.get('http://localhost:5000/api/admin/users', config)
+            .then(res => this.setState({
+                    users: res.data
+                }))
+            .catch((error) => { 
+                if(error.response.data.message === 'jwt expired') {
+                    this.Auth.logout();
+                    this.props.history.replace('/login');
+                }
+            });
     }
 
     editUser = () => {

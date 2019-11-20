@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import AuthService from './AuthService';
-
+import { Redirect } from 'react-router-dom';
 
 class Login extends Component {
     constructor(props) {
@@ -45,34 +45,38 @@ class Login extends Component {
     }
     
     render() { 
-        return ( 
-        <div>
-            <h2 style={{display: 'flex', justifyContent: 'center', margin: '30px'}}>Twitter Clone</h2>
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-                <Form onSubmit={this.onSubmit}>
-                    <FormGroup>
-                        <Label>Användarnamn:</Label>
-                        <Input 
-                        onChange={this.onChange}
-                        type="text"
-                        name="username"
-                        />
-                    </FormGroup>
+        if(localStorage.getItem('auth-token') !== null) {
+            return <Redirect to="/profile" />
+        } else {
+            return ( 
+            <div>
+                <h2 style={{display: 'flex', justifyContent: 'center', margin: '30px'}}>Twitter Clone</h2>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <Form onSubmit={this.onSubmit}>
+                        <FormGroup>
+                            <Label>Användarnamn:</Label>
+                            <Input 
+                            onChange={this.onChange}
+                            type="text"
+                            name="username"
+                            />
+                        </FormGroup>
 
-                    <FormGroup>
-                        <Label>Lösenord:</Label>
-                        <Input 
-                        onChange={this.onChange}
-                        type="password"
-                        name="password"
-                        />
-                    </FormGroup>
+                        <FormGroup>
+                            <Label>Lösenord:</Label>
+                            <Input 
+                            onChange={this.onChange}
+                            type="password"
+                            name="password"
+                            />
+                        </FormGroup>
 
-                    <Button>Logga in</Button>
-                </Form>
+                        <Button>Logga in</Button>
+                    </Form>
+                </div>
             </div>
-        </div>
-        );
+            );
+        }
     }
 }
  
