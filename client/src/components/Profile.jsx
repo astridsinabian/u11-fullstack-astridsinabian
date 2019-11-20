@@ -110,8 +110,8 @@ class Profile extends Component {
                     <FormGroup>
                     <Label>Användarnamn:</Label>
                         <Input 
-                        onChange={this.handleChange}
                         value={username}
+                        readOnly
                         type="text"
                         name="username"
                         />
