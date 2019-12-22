@@ -3,7 +3,6 @@ import axios from 'axios';
 import AuthService from './AuthService';
 import { Modal, ModalBody, Form, Input, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
 
 class OpenProfile extends Component {
 
@@ -22,9 +21,12 @@ class OpenProfile extends Component {
             mergedTweets: [],
             retweetTweet: '',
             retweetUser: '',
-            retweetText: ''
+            retweetText: '',
+            loggedInUserFollowers: [],
+            loggedInUserFollowing: []
         }
 
+        this._isMounted = false;
         this.follow = this.follow.bind(this);
         this.unfollow = this.unfollow.bind(this);
         this.toggle = this.toggle.bind(this);
@@ -99,7 +101,9 @@ class OpenProfile extends Component {
                 username: this.state.username
             }
         }
-        const res = await axios.post('http://localhost:5000/api/user/follow', config);
+        await axios.post('http://localhost:5000/api/user/follow', config);
+
+        this.getUserProfile();
     }
 
     async unfollow(e) {
@@ -116,7 +120,10 @@ class OpenProfile extends Component {
                 username: this.state.username
             }
         }
-        const res = await axios.post('http://localhost:5000/api/user/unfollow', config);
+        
+        await axios.post('http://localhost:5000/api/user/unfollow', config);
+
+        this.getUserProfile();
     }
     
     async getUserProfile() {
@@ -143,7 +150,7 @@ class OpenProfile extends Component {
     async getUserTweets() {
         const { username } = this.props.match.params;
         const res = await axios.get(`http://localhost:5000/api/tweets/${username}`)
-        this.setState({ data: res.data })
+        this._isMounted && this.setState({ data: res.data })
 
         const resRetweets = await axios.get(`http://localhost:5000/api/tweets/retweets/${username}`)
         this.setState({ retweetsData: resRetweets.data })
@@ -164,8 +171,8 @@ class OpenProfile extends Component {
 
         const res = await axios.get('http://localhost:5000/api/user/profile', config)
         this.setState({
-            followers: res.data.user.followers,
-            following: res.data.user.following,
+            loggedInUserFollowers: res.data.user.followers,
+            loggedInUserFollowing: res.data.user.following,
             user: res.data.user.username
         })
         } else {
@@ -174,8 +181,9 @@ class OpenProfile extends Component {
     }
 
     componentDidMount() {
-        this.getUserProfile();
-        this.getUserTweets();
+        this._isMounted = true;
+        this._isMounted && this.getUserProfile();
+        this._isMounted && this.getUserTweets();
     }
 
     render() { 
@@ -186,7 +194,8 @@ class OpenProfile extends Component {
             description, 
             followers, 
             following, 
-            user 
+            user,
+            loggedInUserFollowing
         } = this.state;
 
         let retweetButton;
@@ -211,7 +220,7 @@ class OpenProfile extends Component {
         if(this.Auth.getToken() !== null){
             this.userLoggedIn();
             if(user !== username) {
-                if(!following.includes(username)) {
+                if(!loggedInUserFollowing.includes(username)) {
                     followButtons = (<Button onClick={this.follow}>Följ</Button>)
                     } else {
                         followButtons = (<Button onClick={this.unfollow}>Avfölj</Button>)
