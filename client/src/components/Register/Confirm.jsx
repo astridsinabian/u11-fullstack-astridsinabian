@@ -22,7 +22,7 @@ export class Confirm extends Component {
     }
 
     render() { 
-        const { values: { username, firstname, lastname, email, password, description }} = this.props;
+        const { values: { username, firstname, lastname, email, description }} = this.props;
         return ( 
         <div>
             <h2>Bekräfta</h2>
@@ -32,7 +32,6 @@ export class Confirm extends Component {
                 <div>Förnamn: {firstname}</div>
                 <div>Efternamn: {lastname}</div>
                 <div>Email:{email}</div>
-                <div>Lösenord: {password}</div>
                 <div>Beskrivning: {description}</div>
                 <Button type="submit">Klar!</Button>
             </Form>

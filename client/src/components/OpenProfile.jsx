@@ -10,6 +10,7 @@ class OpenProfile extends Component {
         super(props);
 
         this.state = {
+            user: '',
             username: '',
             firstname: '',
             lastname: '',
@@ -20,9 +21,12 @@ class OpenProfile extends Component {
             mergedTweets: [],
             retweetTweet: '',
             retweetUser: '',
-            retweetText: ''
+            retweetText: '',
+            loggedInUserFollowers: [],
+            loggedInUserFollowing: []
         }
 
+        this._isMounted = false;
         this.follow = this.follow.bind(this);
         this.unfollow = this.unfollow.bind(this);
         this.toggle = this.toggle.bind(this);
@@ -80,8 +84,6 @@ class OpenProfile extends Component {
         });
 
         this.setState({ modal: false });
-
-        
     }
 
 
@@ -99,9 +101,9 @@ class OpenProfile extends Component {
                 username: this.state.username
             }
         }
+        await axios.post('http://localhost:5000/api/user/follow', config);
 
-        const res = await axios.post('http://localhost:5000/api/user/follow', config);
-        
+        this.getUserProfile();
     }
 
     async unfollow(e) {
@@ -118,14 +120,18 @@ class OpenProfile extends Component {
                 username: this.state.username
             }
         }
+        
+        await axios.post('http://localhost:5000/api/user/unfollow', config);
 
-        const res = await axios.post('http://localhost:5000/api/user/unfollow', config);
+        this.getUserProfile();
     }
     
     async getUserProfile() {
         const { username } = this.props.match.params;
         const res = await axios.get(`http://localhost:5000/api/user/${username}`);
-        this.setState({
+
+        try { 
+            this._isMounted && this.setState({
                 username: res.data.user.username,
                 firstname: res.data.user.firstname,
                 lastname: res.data.user.lastname,
@@ -133,14 +139,18 @@ class OpenProfile extends Component {
                 followers: res.data.user.followers,
                 following: res.data.user.following
             })
-
+        } catch(error) {
+            if(this.username === undefined) {
+                return undefined
+            }
+        }
             this.userLoggedIn(username);
     }
 
     async getUserTweets() {
         const { username } = this.props.match.params;
         const res = await axios.get(`http://localhost:5000/api/tweets/${username}`)
-        this.setState({ data: res.data })
+        this._isMounted && this.setState({ data: res.data })
 
         const resRetweets = await axios.get(`http://localhost:5000/api/tweets/retweets/${username}`)
         this.setState({ retweetsData: resRetweets.data })
@@ -161,8 +171,9 @@ class OpenProfile extends Component {
 
         const res = await axios.get('http://localhost:5000/api/user/profile', config)
         this.setState({
-            followers: res.data.user.followers,
-            following: res.data.user.following
+            loggedInUserFollowers: res.data.user.followers,
+            loggedInUserFollowing: res.data.user.following,
+            user: res.data.user.username
         })
         } else {
             return false;
@@ -170,15 +181,26 @@ class OpenProfile extends Component {
     }
 
     componentDidMount() {
-        this.getUserProfile();
-        this.getUserTweets();
+        this._isMounted = true;
+        this._isMounted && this.getUserProfile();
+        this._isMounted && this.getUserTweets();
     }
 
-
     render() { 
-        const { username, firstname, lastname, description, followers, following } = this.state;
+        const { 
+            username, 
+            firstname, 
+            lastname, 
+            description, 
+            followers, 
+            following, 
+            user,
+            loggedInUserFollowing
+        } = this.state;
 
         let retweetButton;
+        let followButtons;
+        let userInfo;
 
         const mergedTweets = this.state.mergedTweets.sort((a, b) => {
             if(a.createdAt > b.createdAt) return -1;
@@ -195,20 +217,18 @@ class OpenProfile extends Component {
             }
         });
 
-        let followButtons;
-
         if(this.Auth.getToken() !== null){
             this.userLoggedIn();
-            if(!following.includes(username)) {
-                followButtons = (<Button onClick={this.follow}>Följ</Button>)
-                } else {
-                    followButtons = (<Button onClick={this.unfollow}>Avfölj</Button>)
+            if(user !== username) {
+                if(!loggedInUserFollowing.includes(username)) {
+                    followButtons = (<Button onClick={this.follow}>Följ</Button>)
+                    } else {
+                        followButtons = (<Button onClick={this.unfollow}>Avfölj</Button>)
+                }
             }
         }
 
-        let userInfo;
-
-        if(this.getUserProfile && this.getUserTweets) {
+        if(this.getUserProfile !== undefined && this.getUserTweets) {
             userInfo = (
             <div>
                 <h2>{username}'s profil</h2>
