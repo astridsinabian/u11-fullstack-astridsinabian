@@ -3,6 +3,7 @@ import axios from 'axios';
 import AuthService from './AuthService';
 import { Modal, ModalBody, Form, Input, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 class OpenProfile extends Component {
 
@@ -10,6 +11,7 @@ class OpenProfile extends Component {
         super(props);
 
         this.state = {
+            user: '',
             username: '',
             firstname: '',
             lastname: '',
@@ -80,8 +82,6 @@ class OpenProfile extends Component {
         });
 
         this.setState({ modal: false });
-
-        
     }
 
 
@@ -99,9 +99,7 @@ class OpenProfile extends Component {
                 username: this.state.username
             }
         }
-
         const res = await axios.post('http://localhost:5000/api/user/follow', config);
-        
     }
 
     async unfollow(e) {
@@ -118,14 +116,15 @@ class OpenProfile extends Component {
                 username: this.state.username
             }
         }
-
         const res = await axios.post('http://localhost:5000/api/user/unfollow', config);
     }
     
     async getUserProfile() {
         const { username } = this.props.match.params;
         const res = await axios.get(`http://localhost:5000/api/user/${username}`);
-        this.setState({
+
+        try { 
+            this._isMounted && this.setState({
                 username: res.data.user.username,
                 firstname: res.data.user.firstname,
                 lastname: res.data.user.lastname,
@@ -133,7 +132,11 @@ class OpenProfile extends Component {
                 followers: res.data.user.followers,
                 following: res.data.user.following
             })
-
+        } catch(error) {
+            if(this.username === undefined) {
+                return undefined
+            }
+        }
             this.userLoggedIn(username);
     }
 
@@ -162,7 +165,8 @@ class OpenProfile extends Component {
         const res = await axios.get('http://localhost:5000/api/user/profile', config)
         this.setState({
             followers: res.data.user.followers,
-            following: res.data.user.following
+            following: res.data.user.following,
+            user: res.data.user.username
         })
         } else {
             return false;
@@ -174,11 +178,20 @@ class OpenProfile extends Component {
         this.getUserTweets();
     }
 
-
     render() { 
-        const { username, firstname, lastname, description, followers, following } = this.state;
+        const { 
+            username, 
+            firstname, 
+            lastname, 
+            description, 
+            followers, 
+            following, 
+            user 
+        } = this.state;
 
         let retweetButton;
+        let followButtons;
+        let userInfo;
 
         const mergedTweets = this.state.mergedTweets.sort((a, b) => {
             if(a.createdAt > b.createdAt) return -1;
@@ -195,20 +208,18 @@ class OpenProfile extends Component {
             }
         });
 
-        let followButtons;
-
         if(this.Auth.getToken() !== null){
             this.userLoggedIn();
-            if(!following.includes(username)) {
-                followButtons = (<Button onClick={this.follow}>Följ</Button>)
-                } else {
-                    followButtons = (<Button onClick={this.unfollow}>Avfölj</Button>)
+            if(user !== username) {
+                if(!following.includes(username)) {
+                    followButtons = (<Button onClick={this.follow}>Följ</Button>)
+                    } else {
+                        followButtons = (<Button onClick={this.unfollow}>Avfölj</Button>)
+                }
             }
         }
 
-        let userInfo;
-
-        if(this.getUserProfile && this.getUserTweets) {
+        if(this.getUserProfile !== undefined && this.getUserTweets) {
             userInfo = (
             <div>
                 <h2>{username}'s profil</h2>
