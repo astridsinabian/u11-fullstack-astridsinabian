@@ -12,7 +12,7 @@ class Tweets extends Component {
 
         this.state = {
             text: '',
-            data: [],
+            tweets: [],
             following: [],
             username: '',
             modal: false,
@@ -125,13 +125,13 @@ class Tweets extends Component {
                 following: resFollowing.data.user.following
             });
 
-        const res = await axios.get('http://localhost:5000/api/tweets')
-            this.setState({ data: res.data });
+        const resTweets = await axios.get('http://localhost:5000/api/tweets')
+            this.setState({ tweets: resTweets.data });
 
         const resRetweets = await axios.get('http://localhost:5000/api/tweets/retweets/retweets')
             this.setState({ retweetsData: resRetweets.data });
 
-            this.setState({ mergedTweets: [...this.state.data, ...this.state.retweetsData] });
+            this.setState({ mergedTweets: [...this.state.tweets, ...this.state.retweetsData] });
     }
 
     componentDidMount() {
@@ -140,18 +140,19 @@ class Tweets extends Component {
 
     render() { 
 
-        const merged = this.state.mergedTweets.sort((a, b) => {
+        const mergedTweets = this.state.mergedTweets.sort((a, b) => {
             if(a.createdAt > b.createdAt) return -1;
             else if(a.createdAt < b.createdAt) return  1;
             else return 0;
-        }).map((tweet, key) => {
-            if(this.state.following.includes(tweet.username) || tweet.username === this.state.username && tweet.text !== undefined) {
-                return <li key={tweet._id}>{tweet.text} - av: <Link to={`/user/${tweet.username}`}>{tweet.username}</Link><button onClick={this.toggle} value={`${tweet.text} / ${tweet.username}`} name="retweet">retweet</button> skapad: {tweet.createdAt}</li>
-            } else if (this.state.following.includes(tweet.username) || tweet.username === this.state.username && tweet.text === undefined) {
-                return <li key={tweet._id}>{tweet.retweetTweet} - av: <Link to={`/user/${tweet.retweetUser}`}>{tweet.retweetUser}</Link> / {tweet.retweetText} - av: <Link to={`/user/${tweet.username}`}>{tweet.username}</Link> skapad: {tweet.createdAt}</li>
+        }).map((tweet) => {
+            if((this.state.following.includes(tweet.username) || tweet.username === this.state.username) && tweet.text !== undefined) {
+                return <li key={tweet._id}>TWEET: [ {tweet.text} ] av: <Link to={`/user/${tweet.username}`}>{tweet.username}</Link><button onClick={this.toggle} value={`${tweet.text} / ${tweet.username}`} name="retweet">retweet</button> skapad: {tweet.createdAt}</li>
+            } 
+            if((this.state.following.includes(tweet.username) || tweet.username === this.state.username) && tweet.text === undefined) {
+                return <li key={tweet._id}>TWEET: [ {tweet.retweetTweet} ] - av: <Link to={`/user/${tweet.retweetUser}`}>{tweet.retweetUser}</Link> / RETWEET: [ {tweet.retweetText} ] - av: <Link to={`/user/${tweet.username}`}>{tweet.username}</Link> skapad: {tweet.createdAt}</li>
             }
         });
-
+        
         return ( 
             <div>
                 <h1>Twittra här</h1>
@@ -188,7 +189,7 @@ class Tweets extends Component {
                 <div>
                     <h2>Flöde</h2>
                     <ul>
-                        { merged }
+                        { mergedTweets }
                     </ul>
                 </div>
             </div>
