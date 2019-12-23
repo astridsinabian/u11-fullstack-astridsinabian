@@ -229,7 +229,7 @@ class OpenProfile extends Component {
             }
         }
 
-        if(this.getUserProfile !== undefined && this.getUserTweets) {
+        if(username !== '') {
             userInfo = (
             <div>
                 <h2>{username}'s profil</h2>
@@ -248,6 +248,8 @@ class OpenProfile extends Component {
                 <ul>{ mergedTweets }</ul>
             </div>
             );
+        } else {
+            return <div>Kunde inte hitta användaren...</div>;
         }
         
         return ( 
