@@ -39,10 +39,10 @@ router.post('/login', async (req, res) => {
     if(error) return res.status(400).send(error.details[0].message);
 
     const user = await User.findOne({username: req.body.user.username});
-    if(!user) return res.status(400).send('Username does not exists');
+    if(!user) return res.status(400).send('Användaren finns inte');
 
     const validPassword = await bcrypt.compare(req.body.user.password, user.password);
-    if(!validPassword) return res.status(400).send('Invalid password');
+    if(!validPassword) return res.status(400).send('Ogiltigt lösenord');
 
     try {
         const token = jwt.sign({id: user._id, username: req.body.user.username}, process.env.TOKEN_SECRET, { expiresIn: '1h' });

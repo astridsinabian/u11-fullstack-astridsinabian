@@ -8,6 +8,11 @@ class Login extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            loading: false,
+            errorMessage: null
+        };
+
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.login = this.login.bind(this);
@@ -23,6 +28,7 @@ class Login extends Component {
     onSubmit(e) {
         e.preventDefault();
         this.login(this.state.username, this.state.password);
+        this.setState({ loading: true });
     }
 
     login = (username, password) => {
@@ -39,12 +45,29 @@ class Login extends Component {
                     this.props.history.push('/admin');
                 } else {
                     this.props.history.push('/profile');
-                }
+                };
+                this.setState({ loading: false });
             })
-            .catch((res) => console.log(res));
+            .catch((error) => {
+                 this.setState({ 
+                        loading: false,
+                        errorMessage: error.response.data
+                    });
+            });
     }
     
     render() { 
+
+        const { loading, errorMessage } = this.state;
+        
+        let loader;
+
+        if(loading === true) {
+            loader = (
+                <div>Loggar in...</div>
+            );
+        }
+
         if(localStorage.getItem('auth-token') !== null) {
             return <Redirect to="/profile" />
         } else {
@@ -72,6 +95,8 @@ class Login extends Component {
                         </FormGroup>
 
                         <Button>Logga in</Button>
+                        { loader }
+                        <div>{ errorMessage }</div>
                     </Form>
                 </div>
             </div>
