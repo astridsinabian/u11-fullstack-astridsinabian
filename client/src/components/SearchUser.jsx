@@ -8,7 +8,8 @@ class SearchUser extends Component {
         super(props);
 
         this.state = {
-            text: ''
+            text: '',
+            isSubmitted: false
         }
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -23,13 +24,14 @@ class SearchUser extends Component {
                 username: res.data.user.username,
                 firstname: res.data.user.firstname,
                 lastname: res.data.user.lastname
-            }));
-        
+            }))
+            .catch(error => error);
     }
 
     onSubmit(e) {
         e.preventDefault();
         this.searchUser(this.state.text);
+        this.setState({isSubmitted: true})
     }
 
     onChange(e) {
@@ -39,7 +41,29 @@ class SearchUser extends Component {
     }
 
     render() { 
-        const { username, firstname, lastname } = this.state;
+        const { username, firstname, lastname, isSubmitted } = this.state;
+
+        let searchedForUser;
+
+        if(isSubmitted === true && username !== undefined) {
+            searchedForUser = (
+                <div>
+                    <Link to={`/user/${username}`}>{username}</Link>
+                    <div>{firstname} {lastname}</div>
+                </div>
+            );
+        }
+        if(isSubmitted === true && username === undefined) {
+            searchedForUser = (
+                <div>Användaren finns inte...</div>
+            );
+        }
+        if(isSubmitted === false) {
+            searchedForUser = (
+                <div></div>
+            );
+        }
+
         return ( 
             <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                 <h3>Sök efter användare</h3>
@@ -51,10 +75,9 @@ class SearchUser extends Component {
                     />
                     <button>Sök</button>
                 </form>
-                <div>
-                    <Link to={`/user/${username}`}>{username}</Link>
-                    <div>{firstname} {lastname}</div>
-                </div>
+
+                { searchedForUser }
+   
             </div>
          );
     }
