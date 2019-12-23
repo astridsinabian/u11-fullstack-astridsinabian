@@ -21,6 +21,7 @@ class Tweets extends Component {
             retweetText: '',
             retweetsData: [],
             mergedTweets: [],
+            loading: true
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -131,7 +132,10 @@ class Tweets extends Component {
         const resRetweets = await axios.get('http://localhost:5000/api/tweets/retweets/retweets')
             this.setState({ retweetsData: resRetweets.data });
 
-            this.setState({ mergedTweets: [...this.state.tweets, ...this.state.retweetsData] });
+            this.setState({ 
+                mergedTweets: [...this.state.tweets, ...this.state.retweetsData],
+                loading: false
+            });
     }
 
     componentDidMount() {
@@ -139,6 +143,8 @@ class Tweets extends Component {
     }
 
     render() { 
+
+        const { loading } = this.state;
 
         const mergedTweets = this.state.mergedTweets.sort((a, b) => {
             if(a.createdAt > b.createdAt) return -1;
@@ -153,47 +159,51 @@ class Tweets extends Component {
             }
         });
         
-        return ( 
-            <div>
-                <h1>Twittra här</h1>
-
-                <Form onSubmit={this.onSubmit}>
-                    <FormGroup>
-                            <Input 
-                                onChange={this.handleChange}
-                                value={this.state.text}
-                                type="textarea"
-                                name="text"
-                                placeholder="Vad har du för tankar just nu?"
-                            />
-                        <Button>Publicera</Button>
-                    </FormGroup>
-                </Form>
-
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                    <ModalBody>
-                        <Form onSubmit={this.retweetSubmit}>
-                            <Input 
-                                onChange={this.handleChange}
-                                type="textarea"
-                                value={this.state.retweetText}
-                                name="retweetText"
-                            />
-                            <div>{this.state.retweetTweet} - av: {this.state.retweetUser}</div>
-                            <Button color="primary">Retweet</Button>
-                        </Form>
-                            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                    </ModalBody>
-                </Modal>
-
+        if(loading) {
+            return <div>Laddar...</div>
+        } else {
+            return ( 
                 <div>
-                    <h2>Flöde</h2>
-                    <ul>
-                        { mergedTweets }
-                    </ul>
+                    <h1>Twittra här</h1>
+
+                    <Form onSubmit={this.onSubmit}>
+                        <FormGroup>
+                                <Input 
+                                    onChange={this.handleChange}
+                                    value={this.state.text}
+                                    type="textarea"
+                                    name="text"
+                                    placeholder="Vad har du för tankar just nu?"
+                                />
+                            <Button>Publicera</Button>
+                        </FormGroup>
+                    </Form>
+
+                    <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                        <ModalBody>
+                            <Form onSubmit={this.retweetSubmit}>
+                                <Input 
+                                    onChange={this.handleChange}
+                                    type="textarea"
+                                    value={this.state.retweetText}
+                                    name="retweetText"
+                                />
+                                <div>{this.state.retweetTweet} - av: {this.state.retweetUser}</div>
+                                <Button color="primary">Retweet</Button>
+                            </Form>
+                                <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                        </ModalBody>
+                    </Modal>
+
+                    <div>
+                        <h2>Flöde</h2>
+                        <ul>
+                            { mergedTweets }
+                        </ul>
+                    </div>
                 </div>
-            </div>
-         );
+            );
+        }
     }
 }
  

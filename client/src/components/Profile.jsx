@@ -33,7 +33,8 @@ class Profile extends Component {
             lastname: '',
             email: '',
             description: '',
-            admin: false
+            admin: false, 
+            loading: true
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -67,6 +68,7 @@ class Profile extends Component {
                 lastname: res.data.user.lastname,
                 email: res.data.user.email,
                 description: res.data.user.description,
+                loading: false
             }))
             .catch((error) => { 
                 if(error.response.data.message === 'jwt expired') {
@@ -99,72 +101,84 @@ class Profile extends Component {
     }
 
     render() { 
-        const { username, firstname, lastname, email, description } = this.state;
-        return ( 
-            <Container>
-                <div>
-                    <h1>Välkommen {firstname} {lastname}!</h1>
-                </div>
+        const { 
+            username, 
+            firstname, 
+            lastname, 
+            email, 
+            description, 
+            loading 
+        } = this.state;
 
-                <FormStyled onSubmit={this.onSubmit}>
-                    <FormGroup>
-                    <Label>Användarnamn:</Label>
-                        <Input 
-                        value={username}
-                        readOnly
-                        type="text"
-                        name="username"
-                        />
-                    </FormGroup>
+        if(loading) {
+            return <div>Laddar profil...</div>
+        } else {
+            return ( 
+                <Container>
+                    <div>
+                        <h1>Välkommen {firstname} {lastname}!</h1>
+                    </div>
 
-                    <FormGroup>
-                    <Label>Förnamn:</Label>
-                        <Input 
-                        onChange={this.handleChange}
-                        value={firstname}
-                        type="text"
-                        name="firstname"
-                        />
-                    </FormGroup>
+                    <FormStyled onSubmit={this.onSubmit}>
+                        <FormGroup>
+                        <Label>Användarnamn:</Label>
+                            <Input 
+                            value={username}
+                            readOnly
+                            type="text"
+                            name="username"
+                            />
+                        </FormGroup>
 
-                    <FormGroup>
-                    <Label>Efternamn:</Label>
-                        <Input 
-                        onChange={this.handleChange}
-                        value={lastname}
-                        type="text"
-                        name="lastname"
-                        />
-                    </FormGroup>
+                        <FormGroup>
+                        <Label>Förnamn:</Label>
+                            <Input 
+                            onChange={this.handleChange}
+                            value={firstname}
+                            type="text"
+                            name="firstname"
+                            />
+                        </FormGroup>
 
-                    <FormGroup>
-                    <Label>Email:</Label>
-                        <Input
-                        value={email}
-                        readOnly
-                        type="text"
-                        />
-                    </FormGroup>
+                        <FormGroup>
+                        <Label>Efternamn:</Label>
+                            <Input 
+                            onChange={this.handleChange}
+                            value={lastname}
+                            type="text"
+                            name="lastname"
+                            />
+                        </FormGroup>
 
-                    <FormGroup>
-                    <Label>Beskriv dig själv</Label>
-                        <Input 
-                        onChange={this.handleChange}
-                        value={description}
-                        type="textarea"
-                        name="description"
-                        />
-                    </FormGroup>
+                        <FormGroup>
+                        <Label>Email:</Label>
+                            <Input
+                            value={email}
+                            readOnly
+                            type="text"
+                            />
+                        </FormGroup>
 
-                    <Button>Ändra uppgifter</Button>
-                </FormStyled>
+                        <FormGroup>
+                        <Label>Beskriv dig själv</Label>
+                            <Input 
+                            onChange={this.handleChange}
+                            value={description}
+                            type="textarea"
+                            name="description"
+                            />
+                        </FormGroup>
 
-                <DivStyled>
-                    <Tweets />
-                </DivStyled>
+                        <Button>Ändra uppgifter</Button>
+                    </FormStyled>
 
-            </Container>
-         );
+                    <DivStyled>
+                        <Tweets />
+                    </DivStyled>
+
+                </Container>
+            );
+        }
     }
 }
  
