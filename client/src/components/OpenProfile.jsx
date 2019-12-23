@@ -212,7 +212,8 @@ class OpenProfile extends Component {
             }
             if(tweet.username === this.state.username && tweet.text !== undefined) {
                 return <li key={tweet._id}>{tweet.text} - av: <Link to={`/user/${tweet.username}`}>{tweet.username}</Link> {retweetButton} skapad: {tweet.createdAt}</li>
-            } else if (tweet.username === this.state.username && tweet.text === undefined) {
+            }
+            if (tweet.username === this.state.username && tweet.text === undefined) {
                 return <li key={tweet._id}>{tweet.retweetTweet} - av: <Link to={`/user/${tweet.retweetUser}`}>{tweet.retweetUser}</Link> / {tweet.retweetText} - av: <Link to={`/user/${tweet.username}`}>{tweet.username}</Link> skapad: {tweet.createdAt}</li>
             }
         });
