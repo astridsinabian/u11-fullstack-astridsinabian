@@ -23,7 +23,8 @@ class OpenProfile extends Component {
             retweetUser: '',
             retweetText: '',
             loggedInUserFollowers: [],
-            loggedInUserFollowing: []
+            loggedInUserFollowing: [],
+            loading: true
         }
 
         this._isMounted = false;
@@ -137,7 +138,7 @@ class OpenProfile extends Component {
                 lastname: res.data.user.lastname,
                 description: res.data.user.description,
                 followers: res.data.user.followers,
-                following: res.data.user.following
+                following: res.data.user.following,
             })
         } catch(error) {
             if(this.username === undefined) {
@@ -150,12 +151,19 @@ class OpenProfile extends Component {
     async getUserTweets() {
         const { username } = this.props.match.params;
         const res = await axios.get(`http://localhost:5000/api/tweets/${username}`)
-        this._isMounted && this.setState({ data: res.data })
+        this._isMounted && this.setState({ 
+            data: res.data,
+        })
 
         const resRetweets = await axios.get(`http://localhost:5000/api/tweets/retweets/${username}`)
-        this.setState({ retweetsData: resRetweets.data })
+        this.setState({ 
+            retweetsData: resRetweets.data,
+        })
 
-        this.setState({ mergedTweets: [...this.state.data, ...this.state.retweetsData] });
+        this.setState({ 
+            mergedTweets: [...this.state.data, ...this.state.retweetsData],
+            loading: false 
+        });
     }
 
     async userLoggedIn() {
@@ -173,7 +181,8 @@ class OpenProfile extends Component {
         this.setState({
             loggedInUserFollowers: res.data.user.followers,
             loggedInUserFollowing: res.data.user.following,
-            user: res.data.user.username
+            user: res.data.user.username,
+            loading: false
         })
         } else {
             return false;
@@ -195,7 +204,8 @@ class OpenProfile extends Component {
             followers, 
             following, 
             user,
-            loggedInUserFollowing
+            loggedInUserFollowing,
+            loading
         } = this.state;
 
         let retweetButton;
@@ -248,31 +258,37 @@ class OpenProfile extends Component {
                 <ul>{ mergedTweets }</ul>
             </div>
             );
-        } else {
-            return <div>Kunde inte hitta användaren...</div>;
+        } 
+        if(username === '') {
+            userInfo = (
+                <div>Kunde inte hitta användaren...</div>
+            );
         }
-        
-        return ( 
-            <div>
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                    <ModalBody>
-                        <Form onSubmit={this.retweetSubmit}>
-                            <Input 
-                                onChange={this.handleChange}
-                                type="textarea"
-                                value={this.state.retweetText}
-                                name="retweetText"
-                            />
-                            <div>{this.state.retweetTweet} - av: {this.state.retweetUser}</div>
-                            <Button color="primary">Retweet</Button>
-                        </Form>
-                            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                    </ModalBody>
-                </Modal>
 
-                { userInfo }
-            </div>
-         );
+        if(loading) {
+            return <div>laddar...</div>
+        } else {
+            return ( 
+                <div>
+                    <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                        <ModalBody>
+                            <Form onSubmit={this.retweetSubmit}>
+                                <Input 
+                                    onChange={this.handleChange}
+                                    type="textarea"
+                                    value={this.state.retweetText}
+                                    name="retweetText"
+                                />
+                                <div>{this.state.retweetTweet} - av: {this.state.retweetUser}</div>
+                                <Button color="primary">Retweet</Button>
+                            </Form>
+                                <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                        </ModalBody>
+                    </Modal>
+                    { userInfo }
+                </div>
+            );
+        }
     }
 }
  
