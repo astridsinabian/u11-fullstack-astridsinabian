@@ -182,7 +182,6 @@ class OpenProfile extends Component {
             loggedInUserFollowers: res.data.user.followers,
             loggedInUserFollowing: res.data.user.following,
             user: res.data.user.username,
-            loading: false
         })
         } else {
             return false;

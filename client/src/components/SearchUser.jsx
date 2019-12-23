@@ -9,7 +9,8 @@ class SearchUser extends Component {
 
         this.state = {
             text: '',
-            isSubmitted: false
+            isSubmitted: false,
+            loading: false
         }
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -23,15 +24,23 @@ class SearchUser extends Component {
             .then(res => this.setState({
                 username: res.data.user.username,
                 firstname: res.data.user.firstname,
-                lastname: res.data.user.lastname
+                lastname: res.data.user.lastname,
+                loading: false
             }))
-            .catch(error => error);
+            .catch(() => { 
+                this.setState({
+                    loading: false
+                });
+            });
     }
 
     onSubmit(e) {
         e.preventDefault();
         this.searchUser(this.state.text);
-        this.setState({isSubmitted: true})
+        this.setState({ 
+            isSubmitted: true,
+            loading: true
+        })
     }
 
     onChange(e) {
@@ -41,7 +50,13 @@ class SearchUser extends Component {
     }
 
     render() { 
-        const { username, firstname, lastname, isSubmitted } = this.state;
+        const { 
+            username, 
+            firstname, 
+            lastname, 
+            isSubmitted, 
+            loading 
+        } = this.state;
 
         let searchedForUser;
 
@@ -61,6 +76,11 @@ class SearchUser extends Component {
         if(isSubmitted === false) {
             searchedForUser = (
                 <div></div>
+            );
+        }
+        if(loading) {
+            searchedForUser = (
+                <div>Söker...</div>
             );
         }
 
