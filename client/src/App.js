@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import styled from "styled-components";
 
-import NavBar from './components/NavBar';
-import Profile from './components/Profile';
-import Register from './components/Register/Register';
-import Login from './components/Login';
-import FrontPage from './components/FrontPage';
-import PrivateRoute from './components/PrivateRoute';
-import OpenProfile from './components/OpenProfile';
-import SearchUser from './components/SearchUser';
-import Admin from './components/Admin';
+import NavBar from "./components/NavBar";
+import Profile from "./components/Profile";
+import Register from "./components/Register/Register";
+import Login from "./components/Login";
+import FrontPage from "./components/FrontPage";
+import PrivateRoute from "./components/PrivateRoute";
+import OpenProfile from "./components/OpenProfile";
+import SearchUser from "./components/SearchUser";
+import Admin from "./components/Admin";
 
 const Container = styled.div`
   margin: 0;
@@ -40,4 +40,3 @@ class App extends Component {
 }
 
 export default App;
-
