@@ -21,7 +21,8 @@ class Tweets extends Component {
             retweetText: '',
             retweetsData: [],
             mergedTweets: [],
-            loading: true
+            loading: true,
+            publishButton: false
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -41,6 +42,12 @@ class Tweets extends Component {
         this.setState({
             [e.target.name]: e.target.value
         });
+
+        if(e.target.value === '' || e.target.value === undefined || e.target.value === null) {
+            this.setState({ publishButton: false })
+        } else {
+            this.setState({ publishButton: true })
+        }
     }
 
     toggle(e) {
@@ -144,7 +151,7 @@ class Tweets extends Component {
 
     render() { 
 
-        const { loading } = this.state;
+        const { loading, publishButton } = this.state;
 
         const mergedTweets = this.state.mergedTweets.sort((a, b) => {
             if(a.createdAt > b.createdAt) return -1;
@@ -175,7 +182,8 @@ class Tweets extends Component {
                                     name="text"
                                     placeholder="Vad har du för tankar just nu?"
                                 />
-                            <Button>Publicera</Button>
+
+                            { publishButton === true ? <Button>Publicera</Button> : <Button disabled>Publicera</Button>}
                         </FormGroup>
                     </Form>
 
