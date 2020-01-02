@@ -263,7 +263,7 @@ class Admin extends Component {
                     <ModalBody>
                         <Form onSubmit={this.onSubmit}>
                         <FormGroup>
-                            <Label>Förnamn</Label>
+                            <Label>Förnamn: *</Label>
                             <Input
                                 onChange={this.handleChange}
                                 value={this.state.newFirstname}
@@ -273,7 +273,7 @@ class Admin extends Component {
                             />
                         </FormGroup>
                         <FormGroup>
-                            <Label>Efternamn</Label>
+                            <Label>Efternamn: *</Label>
                             <Input
                                 onChange={this.handleChange}
                                 value={this.state.newLastname}
@@ -283,7 +283,7 @@ class Admin extends Component {
                             />
                         </FormGroup>
                         <FormGroup>
-                            <Label>Email</Label>
+                            <Label>Email: *</Label>
                             <Input
                                 onChange={this.handleChange}
                                 value={this.state.newEmail}
@@ -294,7 +294,7 @@ class Admin extends Component {
                         </FormGroup>
 
                         <FormGroup>
-                            <Label>Ändra roll:</Label>
+                            <Label>Ändra roll: *</Label>
                             
                             <div style={{display: 'flex'}}>
                                 <h6>Admin</h6>
@@ -329,7 +329,7 @@ class Admin extends Component {
 
                         <Form onSubmit={this.createNewUser}>
                         <FormGroup>
-                            <Label>Användarnamn</Label>
+                            <Label>Användarnamn: *</Label>
                             <Input 
                                 onChange={this.handleChange}
                                 value={this.state.username}
@@ -345,7 +345,7 @@ class Admin extends Component {
 
                         <div style={{display: 'flex', }}>
                             <FormGroup>
-                                <Label>Förnamn</Label>
+                                <Label>Förnamn: *</Label>
                                 <Input 
                                     onChange={this.handleChange} 
                                     value={this.state.firstname}
@@ -360,7 +360,7 @@ class Admin extends Component {
                             </FormGroup>
                             
                             <FormGroup>
-                                <Label>Efternamn</Label>
+                                <Label>Efternamn: *</Label>
                                 <Input
                                     onChange={this.handleChange} 
                                     value={this.state.lastname}
@@ -376,7 +376,7 @@ class Admin extends Component {
                         </div>
 
                         <FormGroup>
-                            <Label>Email</Label>
+                            <Label>Email: *</Label>
                             <Input 
                                 onChange={this.handleChange} 
                                 value={this.state.email}
@@ -391,7 +391,7 @@ class Admin extends Component {
                         </FormGroup>
 
                         <FormGroup>
-                            <Label>Lösenord</Label>
+                            <Label>Lösenord: *</Label>
                             <Input 
                                 onChange={this.handleChange} 
                                 value={this.state.password}

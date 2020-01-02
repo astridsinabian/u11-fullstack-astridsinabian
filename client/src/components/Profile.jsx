@@ -141,7 +141,7 @@ class Profile extends Component {
 
                     <FormStyled onSubmit={this.onSubmit}>
                         <FormGroup>
-                        <Label>Användarnamn:</Label>
+                        <Label>Användarnamn: *</Label>
                             <Input 
                             value={username}
                             readOnly
@@ -151,7 +151,7 @@ class Profile extends Component {
                         </FormGroup>
 
                         <FormGroup>
-                        <Label>Förnamn:</Label>
+                        <Label>Förnamn: *</Label>
                             <Input 
                             onChange={this.handleChange}
                             value={firstname}
@@ -161,7 +161,7 @@ class Profile extends Component {
                         </FormGroup>
 
                         <FormGroup>
-                        <Label>Efternamn:</Label>
+                        <Label>Efternamn: *</Label>
                             <Input 
                             onChange={this.handleChange}
                             value={lastname}
@@ -171,7 +171,7 @@ class Profile extends Component {
                         </FormGroup>
 
                         <FormGroup>
-                        <Label>Email:</Label>
+                        <Label>Email: *</Label>
                             <Input
                             value={email}
                             readOnly
