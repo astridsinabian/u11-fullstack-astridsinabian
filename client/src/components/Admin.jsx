@@ -38,6 +38,7 @@ class Admin extends Component {
             }
         };
 
+        this._isMounted = false;
         this.toggle = this.toggle.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -173,7 +174,7 @@ class Admin extends Component {
         }
     }
 
-    getUsers = () => {
+    async getUsers() {
         let token = this.Auth.getToken();
         const config = { 
                 headers: {
@@ -182,16 +183,18 @@ class Admin extends Component {
                 }
             }
 
-        axios.get('http://localhost:5000/api/admin/users', config)
-            .then(res => this.setState({
-                    users: res.data
-                }))
-            .catch((error) => { 
-                if(error.response.data.message === 'jwt expired') {
-                    this.Auth.logout();
-                    this.props.history.replace('/login');
-                }
+        const res = await axios.get('http://localhost:5000/api/admin/users', config)
+        
+        try {
+            this._isMounted && this.setState({
+                users: res.data
             });
+        } catch(error) { 
+            if(error.response.data.message === 'jwt expired') {
+                this.Auth.logout();
+                this.props.history.replace('/login');
+            }
+        }
     }
 
     editUser = () => {
@@ -218,7 +221,8 @@ class Admin extends Component {
     }
 
     componentDidMount() {
-        this.getUsers();
+        this._isMounted = true;
+        this._isMounted && this.getUsers();
     }
 
     render() { 

@@ -25,6 +25,7 @@ class Tweets extends Component {
             publishButton: false
         }
 
+        this._isMounted = false;
         this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.retweetSubmit = this.retweetSubmit.bind(this);
@@ -127,26 +128,30 @@ class Tweets extends Component {
             }
         }
 
-        const resFollowing = await axios.get('http://localhost:5000/api/user/profile', config)
-            this.setState({
+        const resFollowing = await axios.get('http://localhost:5000/api/user/profile', config);
+        const resTweets = await axios.get('http://localhost:5000/api/tweets');
+        const resRetweets = await axios.get('http://localhost:5000/api/tweets/retweets/retweets');
+
+        try {
+            this._isMounted && this.setState({
                 username: resFollowing.data.user.username,
-                following: resFollowing.data.user.following
+                following: resFollowing.data.user.following,
+                tweets: resTweets.data,
+                retweetsData: resRetweets.data
             });
+        } catch(error) {
+            return error;
+        }
 
-        const resTweets = await axios.get('http://localhost:5000/api/tweets')
-            this.setState({ tweets: resTweets.data });
-
-        const resRetweets = await axios.get('http://localhost:5000/api/tweets/retweets/retweets')
-            this.setState({ retweetsData: resRetweets.data });
-
-            this.setState({ 
-                mergedTweets: [...this.state.tweets, ...this.state.retweetsData],
-                loading: false
-            });
+        this.setState({ 
+            mergedTweets: [...this.state.tweets, ...this.state.retweetsData],
+            loading: false
+        });
     }
 
     componentDidMount() {
-        this.getTweets();
+        this._isMounted = true;
+        this._isMounted && this.getTweets();
     }
 
     render() { 

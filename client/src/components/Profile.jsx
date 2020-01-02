@@ -39,6 +39,7 @@ class Profile extends Component {
             updateButton: false
         }
 
+        this._isMounted = false;
         this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.Auth = new AuthService();
@@ -66,7 +67,7 @@ class Profile extends Component {
         this.setState({ updatedUserText: true });
     }
 
-    getUser = () => {
+    async getUser() {
         let token = Auth.getToken();
         const config = { 
                 headers: {
@@ -74,21 +75,24 @@ class Profile extends Component {
                     'Authorization': token
                 }
             }
-        axios.get('http://localhost:5000/api/user/profile', config)
-            .then(res => this.setState({
+        const res = await axios.get('http://localhost:5000/api/user/profile', config)
+            
+        try {
+            this._isMounted && this.setState({
                 username: res.data.user.username,
                 firstname: res.data.user.firstname,
                 lastname: res.data.user.lastname,
                 email: res.data.user.email,
                 description: res.data.user.description,
                 loading: false
-            }))
-            .catch((error) => { 
-                if(error.response.data.message === 'jwt expired') {
-                    this.Auth.logout();
-                    this.props.history.replace('/login');
-                }
-            });
+            })
+        }
+        catch(error) { 
+            if(error.response.data.message === 'jwt expired') {
+                this.Auth.logout();
+                this.props.history.replace('/login');
+            }
+        }
     }
 
     editUser = () => {
@@ -110,7 +114,8 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        this.getUser();
+        this._isMounted = true;
+        this._isMounted && this.getUser();
     }
 
     render() { 
