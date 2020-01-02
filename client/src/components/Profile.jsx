@@ -62,12 +62,8 @@ class Profile extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.setState({ updatedUserText: false });
-
-
-
-        this.setState({ updatedUserText: true });
         this.editUser();
+        this.setState({ updatedUserText: true });
     }
 
     getUser = () => {
