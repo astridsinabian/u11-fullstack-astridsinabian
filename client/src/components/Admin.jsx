@@ -2,7 +2,19 @@ import React, { Component } from 'react';
 import AuthService from './AuthService';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input } from 'reactstrap';
+import { 
+    Button, 
+    Modal, 
+    ModalHeader, 
+    ModalBody, 
+    Form, 
+    FormGroup, 
+    Label, 
+    Input,
+    FormFeedback
+} from 'reactstrap';
+
+const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 class Admin extends Component {
 
@@ -16,7 +28,14 @@ class Admin extends Component {
             firstname: '',
             lastname: '',
             email: '',
-            password: ''
+            password: '',
+            validate: {
+                usernameState: '',
+                firstnameState: '',
+                lastnameState: '',
+                emailState: '',
+                passwordState: ''
+            }
         };
 
         this.toggle = this.toggle.bind(this);
@@ -41,6 +60,10 @@ class Admin extends Component {
     createNewUser(e) {
         e.preventDefault(e);
 
+        if(Object.values(this.state.validate).includes("has-danger")){
+            return;
+        }
+
         const user = {  
             username: this.state.username,
             firstname: this.state.firstname,
@@ -56,16 +79,64 @@ class Admin extends Component {
             firstname: '',
             lastname: '',
             email: '',
-            password: ''
-        })
+            password: '',
+            validate: {
+                usernameState: '',
+                firstnameState: '',
+                lastnameState: '',
+                emailState: '',
+                passwordState: ''
+            }
+        });
 
         this.getUsers();
     }
 
     handleChange(e) {
+        const { validate } = this.state;
         this.setState({
             [e.target.name]: e.target.value
         });
+
+        switch(e.target.name) {
+            case 'username':
+                if(e.target.value.length >= 6) {
+                    validate.usernameState = 'has-success';
+                } else {
+                    validate.usernameState = 'has-danger'
+                }
+                break;
+            case 'firstname':
+                if(e.target.value.length >= 2) {
+                    validate.firstnameState = 'has-success';
+                } else {
+                    validate.firstnameState = 'has-danger'
+                }
+                break;
+            case 'lastname':
+                if(e.target.value.length >= 2) {
+                    validate.lastnameState = 'has-success';
+                } else {
+                    validate.lastnameState = 'has-danger'
+                }
+                break;
+            case 'email':
+                if (emailRex.test(e.target.value)) {
+                    validate.emailState = 'has-success'
+                } else {
+                    validate.emailState = 'has-danger'
+                }
+                break;
+            case 'password':
+                if(e.target.value.length >= 6) {
+                    validate.passwordState = 'has-success';
+                } else {
+                    validate.passwordState = 'has-danger'
+                }
+                break;
+        }
+
+        this.setState({ validate })
     }
 
     toggle(e) {
@@ -262,7 +333,10 @@ class Admin extends Component {
                                 name="username" 
                                 id="username" 
                                 placeholder="Användarnamn"
+                                valid={ this.state.validate.usernameState === 'has-success' }
+                                invalid={ this.state.validate.usernameState === 'has-danger' }
                             />
+                            <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
                         </FormGroup>
 
                         <div style={{display: 'flex', }}>
@@ -275,7 +349,10 @@ class Admin extends Component {
                                     name="firstname"
                                     id="firstname"
                                     placeholder="Förnamn" 
+                                    valid={ this.state.validate.firstnameState === 'has-success' }
+                                    invalid={ this.state.validate.firstnameState === 'has-danger' }
                                 />
+                                <FormFeedback>Behöver vara minst 2 karaktärer</FormFeedback>
                             </FormGroup>
                             
                             <FormGroup>
@@ -287,7 +364,10 @@ class Admin extends Component {
                                     name="lastname" 
                                     id="lastname" 
                                     placeholder="Efternamn" 
+                                    valid={ this.state.validate.lastnameState === 'has-success' }
+                                    invalid={ this.state.validate.lastnameState === 'has-danger' }
                                 />
+                                <FormFeedback>Behöver vara minst 2 karaktärer</FormFeedback>
                             </FormGroup>
                         </div>
 
@@ -300,7 +380,10 @@ class Admin extends Component {
                                 name="email" 
                                 id="email" 
                                 placeholder="Email" 
+                                valid={ this.state.validate.emailState === 'has-success' }
+                                invalid={ this.state.validate.emailState === 'has-danger' }
                             />
+                            <FormFeedback>Vänligen skriv in en giltig emailadress</FormFeedback>
                         </FormGroup>
 
                         <FormGroup>
@@ -312,7 +395,10 @@ class Admin extends Component {
                                 name="password" 
                                 id="password" 
                                 placeholder="Lösenord" 
+                                valid={ this.state.validate.passwordState === 'has-success' }
+                                invalid={ this.state.validate.passwordState === 'has-danger' }
                             />
+                            <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
                         </FormGroup>
                         <Button>Skapa</Button>
                     </Form>
