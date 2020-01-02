@@ -35,7 +35,8 @@ class Profile extends Component {
             description: '',
             admin: false, 
             loading: true,
-            updatedUserText: false
+            updatedUserText: false,
+            updateButton: false
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -47,15 +48,23 @@ class Profile extends Component {
         this.setState({
             [e.target.name]: e.target.value
         });
+
+        if(e.target.name !== 'description') {
+            if(e.target.value === '' || e.target.value === undefined || e.target.value === null) {
+                this.setState({ updateButton: false })
+            } else {
+                this.setState({ updateButton: true })
+            }
+        } else {
+            this.setState({ updateButton: true })
+        }
     }
 
     onSubmit(e) {
         e.preventDefault();
         this.setState({ updatedUserText: false });
 
-        if(!Object.values(this.state) === 'description' && Object.values(this.state).includes('')) {
-            return;
-        }
+
 
         this.setState({ updatedUserText: true });
         this.editUser();
@@ -116,7 +125,8 @@ class Profile extends Component {
             email, 
             description, 
             loading,
-            updatedUserText
+            updatedUserText,
+            updateButton
         } = this.state;
 
         if(loading) {
@@ -178,7 +188,7 @@ class Profile extends Component {
                             />
                         </FormGroup>
 
-                        <Button>Ändra uppgifter</Button>
+                        { updateButton === true ? <Button>Ändra uppgifter</Button> : <Button disabled>Ändra uppgifter</Button>}
                         <div>{ updatedUserText === true ? 'Ändringar uppdaterade' : '' }</div>
                     </FormStyled>
 
