@@ -34,7 +34,8 @@ class Profile extends Component {
             email: '',
             description: '',
             admin: false, 
-            loading: true
+            loading: true,
+            updatedUserText: false
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -50,6 +51,13 @@ class Profile extends Component {
 
     onSubmit(e) {
         e.preventDefault();
+        this.setState({ updatedUserText: false });
+
+        if(!Object.values(this.state) === 'description' && Object.values(this.state).includes('')) {
+            return;
+        }
+
+        this.setState({ updatedUserText: true });
         this.editUser();
     }
 
@@ -107,7 +115,8 @@ class Profile extends Component {
             lastname, 
             email, 
             description, 
-            loading 
+            loading,
+            updatedUserText
         } = this.state;
 
         if(loading) {
@@ -170,6 +179,7 @@ class Profile extends Component {
                         </FormGroup>
 
                         <Button>Ändra uppgifter</Button>
+                        <div>{ updatedUserText === true ? 'Ändringar uppdaterade' : '' }</div>
                     </FormStyled>
 
                     <DivStyled>
