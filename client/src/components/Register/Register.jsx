@@ -6,6 +6,8 @@ import Confirm from './Confirm';
 import Success from './Success';
 import { Redirect } from 'react-router-dom';
 
+const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 class Register extends Component {
     constructor(props) {
         super(props);
@@ -17,7 +19,14 @@ class Register extends Component {
             email: '',
             password: '',
             description: '',
-            admin: 'false'
+            admin: 'false',
+            validate: {
+                usernameState: '',
+                firstnameState: '',
+                lastnameState: '',
+                emailState: '',
+                passwordState: ''
+            }
         }
 
         this.onChange = this.onChange.bind(this);
@@ -25,7 +34,12 @@ class Register extends Component {
     }
 
     nextStep = () => {
-        const { step } = this.state;
+        const { step, validate } = this.state;
+
+        if(Object.values(validate).includes("has-danger")){
+            return;
+        }
+
         this.setState({
             step: step + 1
         })
@@ -39,9 +53,50 @@ class Register extends Component {
     }
 
     onChange = input => (e) => {
+        const { validate } = this.state
         this.setState({
             [input]: e.target.value
         });
+
+        switch(e.target.name) {
+            case 'username':
+                if(e.target.value.length >= 6) {
+                    validate.usernameState = 'has-success';
+                } else {
+                    validate.usernameState = 'has-danger'
+                }
+                break;
+            case 'firstname':
+                if(e.target.value.length >= 2) {
+                    validate.firstnameState = 'has-success';
+                } else {
+                    validate.firstnameState = 'has-danger'
+                }
+                break;
+            case 'lastname':
+                if(e.target.value.length >= 2) {
+                    validate.lastnameState = 'has-success';
+                } else {
+                    validate.lastnameState = 'has-danger'
+                }
+                break;
+            case 'email':
+                if (emailRex.test(e.target.value)) {
+                    validate.emailState = 'has-success'
+                } else {
+                    validate.emailState = 'has-danger'
+                }
+                break;
+            case 'password':
+                if(e.target.value.length >= 6) {
+                    validate.passwordState = 'has-success';
+                } else {
+                    validate.passwordState = 'has-danger'
+                }
+                break;
+        }
+
+        this.setState({ validate })
     }
 
     render() { 
@@ -60,6 +115,7 @@ class Register extends Component {
                         nextStep={this.nextStep}
                         onChange={this.onChange}
                         values={values}
+                        validate={this.state.validate}
                     />
                 );
                 case 2:

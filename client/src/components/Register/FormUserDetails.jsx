@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { FormGroup, Label, Input, Button } from 'reactstrap';
+import { 
+    FormGroup, 
+    Label, 
+    Input, 
+    Button, 
+    FormFeedback 
+} from 'reactstrap';
 
 export class FormUserDetails extends Component {
     continue = e => {
@@ -8,7 +14,7 @@ export class FormUserDetails extends Component {
     }
 
     render() { 
-        const { values, onChange } = this.props;
+        const { values, onChange, validate } = this.props;
         return ( 
         <div>
             <h2>Fyll i kontaktuppgifter</h2>
@@ -23,7 +29,10 @@ export class FormUserDetails extends Component {
                     name="username" 
                     id="username" 
                     placeholder="Användarnamn"
+                    valid={ validate.usernameState === 'has-success' }
+                    invalid={ validate.usernameState === 'has-danger' }
                 />
+                <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
             </FormGroup>
 
             <div style={{display: 'flex', }}>
@@ -36,7 +45,10 @@ export class FormUserDetails extends Component {
                     name="firstname"
                     id="firstname"
                     placeholder="Förnamn" 
+                    valid={ validate.firstnameState === 'has-success' }
+                    invalid={ validate.firstnameState === 'has-danger' }
                 />
+                <FormFeedback>Behöver vara minst 2 karaktärer</FormFeedback>
             </FormGroup>
             
             <FormGroup>
@@ -48,7 +60,10 @@ export class FormUserDetails extends Component {
                     name="lastname" 
                     id="lastname" 
                     placeholder="Efternamn" 
+                    valid={ validate.lastnameState === 'has-success' }
+                    invalid={ validate.lastnameState === 'has-danger' }
                 />
+                <FormFeedback>Behöver vara minst 2 karaktärer</FormFeedback>
             </FormGroup>
             </div>
 
@@ -61,7 +76,10 @@ export class FormUserDetails extends Component {
                     name="email" 
                     id="email" 
                     placeholder="Email" 
+                    valid={ validate.emailState === 'has-success' }
+                    invalid={ validate.emailState === 'has-danger' }
                 />
+                <FormFeedback>Vänligen skriv in en giltig emailadress</FormFeedback>
             </FormGroup>
 
             <FormGroup>
@@ -73,7 +91,10 @@ export class FormUserDetails extends Component {
                     name="password" 
                     id="password" 
                     placeholder="Lösenord" 
+                    valid={ validate.passwordState === 'has-success' }
+                    invalid={ validate.passwordState === 'has-danger' }
                 />
+                <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
             </FormGroup>
             <Button
                 onClick={this.continue}
