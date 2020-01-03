@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import './App.css';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUser, faLock, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faUser, faLock, faExclamationCircle)
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
