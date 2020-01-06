@@ -3,7 +3,6 @@ import AuthService from "./AuthService";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import {
-  Button,
   Modal,
   ModalHeader,
   ModalBody,
@@ -11,18 +10,19 @@ import {
   FormGroup,
   Label,
   Input,
-  FormFeedback
+  FormFeedback,
+  Spinner
 } from "reactstrap";
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const AdminDashboard = styled.div`
-  @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
-  font-family: 'Montserrat', sans-serif;
+  @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+  font-family: "Montserrat", sans-serif;
 
-  display: flex; 
+  display: flex;
   flex-direction: column;
   margin-top: 70px;
   font-size: 12px;
@@ -106,8 +106,8 @@ const ButtonsEditCancel = styled.div`
 `;
 
 const StyledModal = styled(Modal)`
-  @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
-  font-family: 'Montserrat', sans-serif;
+  @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+  font-family: "Montserrat", sans-serif;
 `;
 
 const TitleModal = styled.span`
@@ -165,6 +165,12 @@ const ErrorMessage = styled.div`
   font-weight: bold;
 `;
 
+const Loading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 130px;
+`;
 
 class Admin extends Component {
   constructor(props) {
@@ -186,7 +192,8 @@ class Admin extends Component {
         passwordState: ""
       },
       errorEmail: false,
-      errorUsername: false
+      errorUsername: false,
+      loading: true
     };
 
     this._isMounted = false;
@@ -218,7 +225,9 @@ class Admin extends Component {
   createNewUser(e) {
     e.preventDefault(e);
 
-    if (Object.values(this.state.validate).every(item => item === "has-success")) {
+    if (
+      Object.values(this.state.validate).every(item => item === "has-success")
+    ) {
       const user = {
         username: this.state.username,
         firstname: this.state.firstname,
@@ -252,21 +261,20 @@ class Admin extends Component {
     this.getUsers();
   }
 
-  register = (data) => {
-    axios.post("http://localhost:5000/api/user/register", data)
-     .catch(error => {
-       if(error.response.data === "Email already exists" ) {
-         this.setState({
-           errorEmail: true
-         });
-       } 
-       if(error.response.data === "Username already exists") {
-         this.setState({
-           errorUsername: true
-         });
-       }
-     })
- };
+  register = data => {
+    axios.post("http://localhost:5000/api/user/register", data).catch(error => {
+      if (error.response.data === "Email already exists") {
+        this.setState({
+          errorEmail: true
+        });
+      }
+      if (error.response.data === "Username already exists") {
+        this.setState({
+          errorUsername: true
+        });
+      }
+    });
+  };
 
   handleChange(e) {
     const { validate } = this.state;
@@ -363,11 +371,15 @@ class Admin extends Component {
     );
 
     try {
-      this._isMounted &&
-        this.setState({
-          users: res.data
-        });
+      this.setState({
+        users: res.data,
+        loading: false
+      });
     } catch (error) {
+      this.setState({
+        loading: false
+      });
+
       if (error.response.data.message === "jwt expired") {
         this.Auth.logout();
         this.props.history.replace("/login");
@@ -390,7 +402,6 @@ class Admin extends Component {
   };
 
   deleteUser = e => {
-    debugger;
     e.preventDefault();
     const id = e.target.value.trim();
 
@@ -400,234 +411,248 @@ class Admin extends Component {
   };
 
   componentDidMount() {
-    this._isMounted = true;
-    this._isMounted && this.getUsers();
+    this.getUsers();
   }
 
   render() {
-    const { errorUsername, errorEmail } = this.state;
+    const { errorUsername, errorEmail, loading } = this.state;
 
     if (this.Auth.isAdmin() === "false") {
       return <Redirect to="/profile" />;
     } else if (this.Auth.isAdmin() === "true") {
-      return (
-        <AdminDashboard>
-          <Title>Översikt</Title>
-          <div>
-            {this.state.users.map((user, key) => {
-              const role = user.admin ? "Admin" : "Vanlig användare";
+      if (loading) {
+        return <Loading><Spinner type="grow" color="secondary" /></Loading>;
+      } else {
+        return (
+          <AdminDashboard>
+            <Title>Översikt</Title>
+            <div>
+              {this.state.users.map((user, key) => {
+                const role = user.admin ? "Admin" : "Vanlig användare";
 
-              return (
-                <Users key={user._id}>
-                  <NameButtons>
-                    <Name>{user.firstname} {user.lastname}</Name>
+                return (
+                  <Users key={user._id}>
+                    <NameButtons>
+                      <Name>
+                        {user.firstname} {user.lastname}
+                      </Name>
+                      <div>
+                        <StyledButtonEdit
+                          onClick={this.toggle}
+                          value={
+                            user.firstname +
+                            " / " +
+                            user.lastname +
+                            " / " +
+                            user.email +
+                            " / " +
+                            user._id +
+                            " / " +
+                            user.admin
+                          }
+                        >
+                          <FontAwesomeIcon icon="edit" />
+                        </StyledButtonEdit>
+                        <StyledButtonDelete
+                          onClick={this.deleteUser}
+                          value={user._id}
+                        >
+                          X
+                        </StyledButtonDelete>
+                      </div>
+                    </NameButtons>
                     <div>
-                      <StyledButtonEdit
-                        onClick={this.toggle}
-                        value={
-                          user.firstname +
-                          " / " +
-                          user.lastname +
-                          " / " +
-                          user.email +
-                          " / " +
-                          user._id +
-                          " / " +
-                          user.admin
-                        }
-                      >
-                        <FontAwesomeIcon icon='edit' />
-                      </StyledButtonEdit>
-                      <StyledButtonDelete
-                        onClick={this.deleteUser}
-                        value={user._id}
-                      >
-                        X
-                      </StyledButtonDelete>
+                      <div>
+                        <UserTitle>Användarnamn:</UserTitle>
+                        <span>{user.username}</span>
+                      </div>
+                      <div>
+                        <UserTitle>Email:</UserTitle>
+                        <span>{user.email}</span>
+                      </div>
+                      <div>
+                        <UserTitle>Roll:</UserTitle>
+                        <span>{role}</span>
+                      </div>
                     </div>
-                  </NameButtons>
-                  <div>
-                    <div>
-                      <UserTitle>Användarnamn:</UserTitle> 
-                      <span>{user.username}</span>
-                    </div>
-                    <div>
-                      <UserTitle>Email:</UserTitle> 
-                      <span>{user.email}</span>
-                    </div>
-                    <div>
-                      <UserTitle>Roll:</UserTitle>
-                      <span>{role}</span>
-                    </div>
-                  </div>
-                </Users>
-              );
-            })}
-          </div>
+                  </Users>
+                );
+              })}
+            </div>
 
-          <StyledModal isOpen={this.state.modal} toggle={this.toggle}>
-            <ModalHeader toggle={this.toggle}>
-              <TitleModal>Ändra {this.state.newFirstname}'s uppgifter</TitleModal>
-            </ModalHeader>
-            <ModalBody>
-              <Form onSubmit={this.onSubmit}>
-                <FormGroup>
-                  <Label>Förnamn: *</Label>
-                  <Input
-                    onChange={this.handleChange}
-                    value={this.state.newFirstname}
-                    type="text"
-                    name="newFirstname"
-                    id="newFirstname"
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label>Efternamn: *</Label>
-                  <Input
-                    onChange={this.handleChange}
-                    value={this.state.newLastname}
-                    type="text"
-                    name="newLastname"
-                    id="newLastname"
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label>Email: *</Label>
-                  <Input
-                    onChange={this.handleChange}
-                    value={this.state.newEmail}
-                    type="text"
-                    name="newEmail"
-                    id="newEmail"
-                  />
-                </FormGroup>
-
-                <FormGroup>
-                  <Label>Ändra roll: *</Label>
-
-                  <StyledRole>
-                    <TitleRole>Admin</TitleRole>
-                    <StyledInput
+            <StyledModal isOpen={this.state.modal} toggle={this.toggle}>
+              <ModalHeader toggle={this.toggle}>
+                <TitleModal>
+                  Ändra {this.state.newFirstname}'s uppgifter
+                </TitleModal>
+              </ModalHeader>
+              <ModalBody>
+                <Form onSubmit={this.onSubmit}>
+                  <FormGroup>
+                    <Label>Förnamn: *</Label>
+                    <Input
                       onChange={this.handleChange}
-                      value="true"
-                      type="radio"
-                      name="newAdmin"
-                      id="newAdmin"
+                      value={this.state.newFirstname}
+                      type="text"
+                      name="newFirstname"
+                      id="newFirstname"
                     />
-
-                    <TitleRole>Vanlig användare</TitleRole>
-                    <StyledInput
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Efternamn: *</Label>
+                    <Input
                       onChange={this.handleChange}
-                      value="false"
-                      type="radio"
-                      name="newAdmin"
-                      id="newAdmin"
+                      value={this.state.newLastname}
+                      type="text"
+                      name="newLastname"
+                      id="newLastname"
                     />
-                  </StyledRole>
-                </FormGroup>
-                <ButtonsEditCancel>
-                  <StyledButtonEdit>
-                    <FontAwesomeIcon icon='check' /></StyledButtonEdit>
-                  <StyledButtonCancel onClick={this.toggle}>
-                    AVBRYT
-                  </StyledButtonCancel>
-                </ButtonsEditCancel>
-              </Form>
-            </ModalBody>
-          </StyledModal>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Email: *</Label>
+                    <Input
+                      onChange={this.handleChange}
+                      value={this.state.newEmail}
+                      type="text"
+                      name="newEmail"
+                      id="newEmail"
+                    />
+                  </FormGroup>
 
-          <hr />
+                  <FormGroup>
+                    <Label>Ändra roll: *</Label>
 
-          <NewUser>
-            <TitleCreateNewUser>Skapa ny användare</TitleCreateNewUser>
+                    <StyledRole>
+                      <TitleRole>Admin</TitleRole>
+                      <StyledInput
+                        onChange={this.handleChange}
+                        value="true"
+                        type="radio"
+                        name="newAdmin"
+                        id="newAdmin"
+                      />
 
-            <StyledForm onSubmit={this.createNewUser}>
-              <FormGroup>
-                <Input
-                  onChange={this.handleChange}
-                  value={this.state.username}
-                  type="text"
-                  name="username"
-                  id="username"
-                  placeholder="Användarnamn"
-                  valid={this.state.validate.usernameState === "has-success"}
-                  invalid={this.state.validate.usernameState === "has-danger"}
-                />
-                <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
-                <ErrorMessage>
-                  { errorUsername ? 'Användarnamn finns redan' : null }
-                </ErrorMessage>
-              </FormGroup>
+                      <TitleRole>Vanlig användare</TitleRole>
+                      <StyledInput
+                        onChange={this.handleChange}
+                        value="false"
+                        type="radio"
+                        name="newAdmin"
+                        id="newAdmin"
+                      />
+                    </StyledRole>
+                  </FormGroup>
+                  <ButtonsEditCancel>
+                    <StyledButtonEdit>
+                      <FontAwesomeIcon icon="check" />
+                    </StyledButtonEdit>
+                    <StyledButtonCancel onClick={this.toggle}>
+                      AVBRYT
+                    </StyledButtonCancel>
+                  </ButtonsEditCancel>
+                </Form>
+              </ModalBody>
+            </StyledModal>
 
-              <div style={{ display: "flex" }}>
+            <hr />
+
+            <NewUser>
+              <TitleCreateNewUser>Skapa ny användare</TitleCreateNewUser>
+
+              <StyledForm onSubmit={this.createNewUser}>
                 <FormGroup>
                   <Input
                     onChange={this.handleChange}
-                    value={this.state.firstname}
-                    type="name"
-                    name="firstname"
-                    id="firstname"
-                    placeholder="Förnamn"
-                    valid={this.state.validate.firstnameState === "has-success"}
-                    invalid={
-                      this.state.validate.firstnameState === "has-danger"
-                    }
+                    value={this.state.username}
+                    type="text"
+                    name="username"
+                    id="username"
+                    placeholder="Användarnamn"
+                    valid={this.state.validate.usernameState === "has-success"}
+                    invalid={this.state.validate.usernameState === "has-danger"}
                   />
-                  <FormFeedback>Behöver vara minst 2 karaktärer</FormFeedback>
+                  <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
+                  <ErrorMessage>
+                    {errorUsername ? "Användarnamn finns redan" : null}
+                  </ErrorMessage>
+                </FormGroup>
+
+                <div style={{ display: "flex" }}>
+                  <FormGroup>
+                    <Input
+                      onChange={this.handleChange}
+                      value={this.state.firstname}
+                      type="name"
+                      name="firstname"
+                      id="firstname"
+                      placeholder="Förnamn"
+                      valid={
+                        this.state.validate.firstnameState === "has-success"
+                      }
+                      invalid={
+                        this.state.validate.firstnameState === "has-danger"
+                      }
+                    />
+                    <FormFeedback>Behöver vara minst 2 karaktärer</FormFeedback>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Input
+                      onChange={this.handleChange}
+                      value={this.state.lastname}
+                      type="name"
+                      name="lastname"
+                      id="lastname"
+                      placeholder="Efternamn"
+                      valid={
+                        this.state.validate.lastnameState === "has-success"
+                      }
+                      invalid={
+                        this.state.validate.lastnameState === "has-danger"
+                      }
+                    />
+                    <FormFeedback>Behöver vara minst 2 karaktärer</FormFeedback>
+                  </FormGroup>
+                </div>
+
+                <FormGroup>
+                  <Input
+                    onChange={this.handleChange}
+                    value={this.state.email}
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Email"
+                    valid={this.state.validate.emailState === "has-success"}
+                    invalid={this.state.validate.emailState === "has-danger"}
+                  />
+                  <ErrorMessage>
+                    {errorEmail ? "Email finns redan" : null}
+                  </ErrorMessage>
+                  <FormFeedback>
+                    Vänligen skriv in en giltig emailadress
+                  </FormFeedback>
                 </FormGroup>
 
                 <FormGroup>
                   <Input
                     onChange={this.handleChange}
-                    value={this.state.lastname}
-                    type="name"
-                    name="lastname"
-                    id="lastname"
-                    placeholder="Efternamn"
-                    valid={this.state.validate.lastnameState === "has-success"}
-                    invalid={this.state.validate.lastnameState === "has-danger"}
+                    value={this.state.password}
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Lösenord"
+                    valid={this.state.validate.passwordState === "has-success"}
+                    invalid={this.state.validate.passwordState === "has-danger"}
                   />
-                  <FormFeedback>Behöver vara minst 2 karaktärer</FormFeedback>
+                  <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
                 </FormGroup>
-              </div>
-
-              <FormGroup>
-                <Input
-                  onChange={this.handleChange}
-                  value={this.state.email}
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Email"
-                  valid={this.state.validate.emailState === "has-success"}
-                  invalid={this.state.validate.emailState === "has-danger"}
-                />
-                <ErrorMessage>
-                  { errorEmail ? 'Email finns redan' : null }
-                </ErrorMessage>
-                <FormFeedback>
-                  Vänligen skriv in en giltig emailadress
-                </FormFeedback>
-              </FormGroup>
-
-              <FormGroup>
-                <Input
-                  onChange={this.handleChange}
-                  value={this.state.password}
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Lösenord"
-                  valid={this.state.validate.passwordState === "has-success"}
-                  invalid={this.state.validate.passwordState === "has-danger"}
-                />
-                <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
-              </FormGroup>
-              <StyledButtonCreate>Skapa</StyledButtonCreate>
-            </StyledForm>
-          </NewUser>
-        </AdminDashboard>
-      );
+                <StyledButtonCreate>Skapa</StyledButtonCreate>
+              </StyledForm>
+            </NewUser>
+          </AdminDashboard>
+        );
+      }
     }
   }
 }
