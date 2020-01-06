@@ -19,8 +19,8 @@ const LoginContentWrapper = styled.div`
   @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
   display: flex;
   font-family: 'Montserrat', sans-serif;
-  // background: linear-gradient(220deg, rgba(127,255,199,0.36165048543689315) 0%, rgba(99,45,253,0.44441526610644255) 100%);
   height: 60vw;
+  margin: 5em 3em;
 `;
 
 const LoginSideDesign = styled.div`

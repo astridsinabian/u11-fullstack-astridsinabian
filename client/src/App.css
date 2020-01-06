@@ -1,3 +1,9 @@
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 .input-group .input-group-text {
     background-color: transparent;
     color:#9c8ed4;

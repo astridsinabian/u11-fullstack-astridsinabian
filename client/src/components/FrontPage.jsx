@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from 'styled-components';
-import background from '../assets/background-frontpage.jpg';
+import background from '../assets/28509423.jpg';
 
 const StyledMain = styled.main`
   @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
@@ -13,30 +13,45 @@ const StyledMain = styled.main`
   align-items: center;
   flex-direction: column;
 
-  background: url(${background});
-  background-repeat: no-repeat;
-  background-size: cover;
   height: 60vw;
+  margin-top: 8em;
+`;
+
+const StyledImg = styled.img`
+  width: 60%;
+  height: 50%;
 `;
 
 const Title = styled.h1`
-  position: absolute;
-  top: 25%;
-  left: 10%;
+  margin-top: 10px;
+  color: black;
 `;
 
 const Slogan = styled.div`
-  position: absolute;
-  top: 35%;
-  left: 10%;
+  color: #a193d6;
+`;
+
+const StyledFooter = styled.footer`
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  color: gray;
+  font-size: 10px;
+  height: 100px;
 `;
 
 class FrontPage extends Component {
   render() {
     return (
       <StyledMain>
+        <StyledImg src={background} alt="front"></StyledImg>
         <Title>Twitter Clone</Title>
-        <Slogan>Dela med dig om vad du tycker och tänker.</Slogan>
+        <Slogan>
+          Dela med dig om vad du tycker och tänker.
+        </Slogan>
+        <StyledFooter>
+          Copyright © 2020 by Astrid Sinabian
+        </StyledFooter>
       </StyledMain>
     );
   }

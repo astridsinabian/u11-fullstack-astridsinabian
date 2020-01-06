@@ -12,7 +12,7 @@ const StepOne = styled.div`
   justify-content: center;
   align-items: center;
   height: 65vw;
-  background-color: #b0d3d526;
+  margin-top: 5em;
 `;
 
 const Title = styled.h4`

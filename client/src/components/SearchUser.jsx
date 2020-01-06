@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import background from '../assets/2887095.jpg';
 
 const Search = styled.div`
   @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
@@ -12,7 +13,7 @@ const Search = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 100px;
+  margin-top: 8em;
 `;
 
 const Title = styled.h2`
@@ -77,6 +78,12 @@ const Message = styled.div`
   font-size: 16px;
   padding: 10px;
   color: gray;
+`;
+
+const StyledImg = styled.img`
+  width: 60%;
+  height: 50%;
+  margin-bottom: 30px;
 `;
 
 class SearchUser extends Component {
@@ -154,6 +161,7 @@ class SearchUser extends Component {
     return (
       <Search>
         <Title>Sök efter användare</Title>
+        <StyledImg src={background} alt="front"></StyledImg>
         <StyledForm onSubmit={this.onSubmit}>
           <StyledButtonSearch> { loading ? <Spinner size="sm" color="light" /> : <FontAwesomeIcon icon='search' /> }</StyledButtonSearch>
           <StyledInput onChange={this.onChange} type="text" name="text" />
