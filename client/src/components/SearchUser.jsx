@@ -1,6 +1,21 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const Search = styled.div`
+  @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+  font-family: 'Montserrat', sans-serif;
+`;
+
+const Title = styled.h2``;
+
+const StyledForm = styled.form``
+
+const StyledInput = styled.input``;
+
+const StyledButtonSearch = styled.button``;
 
 class SearchUser extends Component {
   constructor(props) {
@@ -77,21 +92,15 @@ class SearchUser extends Component {
     }
 
     return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column"
-        }}
-      >
-        <h3>Sök efter användare</h3>
-        <form onSubmit={this.onSubmit}>
-          <input onChange={this.onChange} type="text" name="text" />
-          <button>Sök</button>
-        </form>
+      <Search>
+        <Title>Sök efter användare</Title>
+        <StyledForm onSubmit={this.onSubmit}>
+          <StyledInput onChange={this.onChange} type="text" name="text" />
+          <StyledButtonSearch>Sök</StyledButtonSearch>
+        </StyledForm>
 
         {searchedForUser}
-      </div>
+      </Search>
     );
   }
 }

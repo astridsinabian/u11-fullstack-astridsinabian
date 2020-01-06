@@ -5,11 +5,14 @@ const bcrypt = require("bcryptjs");
 const { registerValidation, loginValidation } = require("../validation");
 
 router.post("/register", async (req, res) => {
-  const { error } = registerValidation(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
   const emailExist = await User.findOne({ email: req.body.email });
   if (emailExist) return res.status(400).send("Email already exists");
+
+  const usernameExist = await User.findOne({ username:  req.body.username });
+  if(usernameExist) return res.status(400).send("Username already exists");
+
+  const { error } = registerValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);

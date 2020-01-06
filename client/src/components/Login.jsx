@@ -13,41 +13,38 @@ import AuthService from "./AuthService";
 import { Redirect } from "react-router-dom";
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import backgroundImageOrangeColor from "../assets/10730.jpg";
-
+import Image from "../assets/62348.jpg";
 
 const LoginContentWrapper = styled.div`
   @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
   display: flex;
   font-family: 'Montserrat', sans-serif;
-  background: url(${backgroundImageOrangeColor});
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  // background: linear-gradient(220deg, rgba(127,255,199,0.36165048543689315) 0%, rgba(99,45,253,0.44441526610644255) 100%);
   height: 60vw;
 `;
 
 const LoginSideDesign = styled.div`
-  width: 100%;
+  width: 110vw;
 `;
 
 const LoginFormWrapper = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
-  margin: 20px 150px 20px 100px;
+  width: 100%;
 `;
 
 const StyledForm = styled(Form)`
-  width: 25vw;
   margin-top: 20px;
+  width: 25vw;
 `;
 
 const StyledTitle = styled.h3`
   display: flex;
   justify-content: center;
   margin: 0;
-  color: #f67936;
+  color: #9c8ed4;
   font-weight: bold;
   letter-spacing: 0.5px;
 `;
@@ -63,10 +60,10 @@ const StyledButton = styled.button`
   display: flex;
   justify-content: center;
   margin: 1.5em 0 0 0;
-  background-color: #fabd7c;
+  background-color: #9c8ed4;
   color: white;
   font-weight: 500;
-  border: 3px solid #fabd7c;
+  border: 3px solid #9c8ed4;
   border-radius: 12px;
   padding: 5px;
   box-shadow: 2px 8px 15px -6px rgba(204,204,204,1);
@@ -74,8 +71,8 @@ const StyledButton = styled.button`
   font-size: 14px;
 
   &:hover {
-    background-color: #f99b51;
-    border: 3px solid #f99b51;
+    background-color: #a69bce;
+    border: 3px solid #a69bce;
   }
 `;
 
@@ -188,7 +185,9 @@ class Login extends Component {
       return (
         <div>
           <LoginContentWrapper>
-            <LoginSideDesign></LoginSideDesign>
+            <LoginSideDesign>
+              <img src={Image} alt="" width="100%" height="100%"/>
+            </LoginSideDesign>
             <LoginFormWrapper>
             <StyledTitle>Logga in</StyledTitle>
               <StyledForm onSubmit={this.onSubmit}>

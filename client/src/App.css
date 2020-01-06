@@ -1,10 +1,11 @@
 .input-group .input-group-text {
     background-color: transparent;
-    color: #f99b51;
+    color:#9c8ed4;
     border-left: 0;
     border-right: 0;
     border-top: 0;
     border-radius: 0;
+    border-color: #a69bce;
 }
 
 .input-group .form-control {
@@ -15,6 +16,7 @@
     padding-left: 0;
     background-color: transparent;
     font-size: 12px;
+    border-color: #a69bce;
 }
 
 .input-group .form-control:focus {
@@ -22,6 +24,35 @@
     background-color: transparent;
 }
 
-.dropdown button::after {
-    margin: 0;
+.form-group .form-control {
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    border-radius: 0;
+    padding-left: 0;
+    background-color: transparent;
+    font-size: 12px;
+    border-color: #a69bce;
+}
+
+.form-group .form-control:focus {
+    font-size: 14px;
+    background-color: transparent;
+}
+
+#description {
+    border-left: 0.5px solid #efefef;
+    border-right: 0.5px solid #efefef;
+    border-top: 0.5px solid #efefef;
+    height: 200px;
+    margin: 15px;
+    padding: 10px;
+}
+
+#description:focus {
+    font-size: 12px;
+}
+
+.sc-chPdSV .form-group {
+    margin-bottom: 0;
 }

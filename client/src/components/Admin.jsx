@@ -13,8 +13,158 @@ import {
   Input,
   FormFeedback
 } from "reactstrap";
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const AdminDashboard = styled.div`
+  @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+  font-family: 'Montserrat', sans-serif;
+
+  display: flex; 
+  flex-direction: column;
+  margin-top: 70px;
+  font-size: 12px;
+`;
+
+const Title = styled.h3`
+  display: flex;
+  justify-content: center;
+  font-size: 26px;
+`;
+
+const Users = styled.div`
+  border: 1px dotted lightgray;
+  border-radius: 12px;
+  margin: 20px 50px;
+  padding: 10px;
+`;
+
+const NameButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Name = styled.h6`
+  text-transform: capitalize;
+  font-weight: bold;
+  padding: 0 5px;
+`;
+
+const UserTitle = styled.span`
+  padding: 5px;
+  font-weight: 600;
+`;
+
+const StyledButtonEdit = styled.button`
+  background-color: #61b2ff;
+  border-radius: 12px;
+  border: 1px solid #61b2ff;
+  color: white;
+  padding: 4px 7px 4px 8px;
+
+  &:hover {
+    background-color: #75bcff;
+    border: 1px solid #75bcff;
+  }
+`;
+
+const StyledButtonDelete = styled.button`
+  background-color: #e52855;
+  border-radius: 12px;
+  border: 1px solid #e52855;
+  color: white;
+  padding: 4px 7px 4px 8px;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #f7446f;
+    border: 1px solid #f7446f;
+  }
+`;
+
+const StyledButtonCancel = styled.button`
+  background-color: #afafaf;
+  border-radius: 12px;
+  border: 1px solid #afafaf;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 7px 5px 8px;
+  margin-left: 3px;
+
+  &:hover {
+    background-color: #c3c3c3;
+    border: 1px solid #c3c3c3;
+  }
+`;
+
+const ButtonsEditCancel = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const StyledModal = styled(Modal)`
+  @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+  font-family: 'Montserrat', sans-serif;
+`;
+
+const TitleModal = styled.span`
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const StyledRole = styled.div`
+  display: flex;
+`;
+
+const TitleRole = styled.h6`
+  font-size: 12px;
+  padding: 5px 0;
+`;
+
+const StyledInput = styled.input`
+  margin: 5px;
+`;
+
+const NewUser = styled.div`
+  margin: 0px 55px 60px 55px;
+`;
+
+const TitleCreateNewUser = styled.h6`
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+`;
+
+const StyledForm = styled(Form)`
+  margin: 15px 0;
+`;
+
+const StyledButtonCreate = styled.button`
+  float: right;
+  background-color: #afafaf;
+  border-radius: 12px;
+  border: 1px solid #afafaf;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 7px 5px 8px;
+  margin-left: 3px;
+
+  &:hover {
+    background-color: #c3c3c3;
+    border: 1px solid #c3c3c3;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 10px;
+  font-weight: bold;
+`;
+
 
 class Admin extends Component {
   constructor(props) {
@@ -34,7 +184,9 @@ class Admin extends Component {
         lastnameState: "",
         emailState: "",
         passwordState: ""
-      }
+      },
+      errorEmail: false,
+      errorUsername: false
     };
 
     this._isMounted = false;
@@ -43,6 +195,7 @@ class Admin extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.createNewUser = this.createNewUser.bind(this);
     this.Auth = new AuthService();
+    this.register = this.register.bind(this);
   }
 
   onSubmit(e) {
@@ -65,37 +218,55 @@ class Admin extends Component {
   createNewUser(e) {
     e.preventDefault(e);
 
-    if (Object.values(this.state.validate).includes("has-danger")) {
+    if (Object.values(this.state.validate).every(item => item === "has-success")) {
+      const user = {
+        username: this.state.username,
+        firstname: this.state.firstname,
+        lastname: this.state.lastname,
+        email: this.state.email,
+        password: this.state.password
+      };
+
+      this.register(user);
+
+      this.setState({
+        username: "",
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: "",
+        validate: {
+          usernameState: "",
+          firstnameState: "",
+          lastnameState: "",
+          emailState: "",
+          passwordState: ""
+        },
+        errorEmail: false,
+        errorUsername: false
+      });
+    } else {
       return;
     }
 
-    const user = {
-      username: this.state.username,
-      firstname: this.state.firstname,
-      lastname: this.state.lastname,
-      email: this.state.email,
-      password: this.state.password
-    };
-
-    this.Auth.register(user);
-
-    this.setState({
-      username: "",
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      validate: {
-        usernameState: "",
-        firstnameState: "",
-        lastnameState: "",
-        emailState: "",
-        passwordState: ""
-      }
-    });
-
     this.getUsers();
   }
+
+  register = (data) => {
+    axios.post("http://localhost:5000/api/user/register", data)
+     .catch(error => {
+       if(error.response.data === "Email already exists" ) {
+         this.setState({
+           errorEmail: true
+         });
+       } 
+       if(error.response.data === "Username already exists") {
+         this.setState({
+           errorUsername: true
+         });
+       }
+     })
+ };
 
   handleChange(e) {
     const { validate } = this.state;
@@ -219,6 +390,7 @@ class Admin extends Component {
   };
 
   deleteUser = e => {
+    debugger;
     e.preventDefault();
     const id = e.target.value.trim();
 
@@ -233,64 +405,69 @@ class Admin extends Component {
   }
 
   render() {
+    const { errorUsername, errorEmail } = this.state;
+
     if (this.Auth.isAdmin() === "false") {
       return <Redirect to="/profile" />;
     } else if (this.Auth.isAdmin() === "true") {
       return (
-        <div>
-          <h2>Admin - Översikt</h2>
+        <AdminDashboard>
+          <Title>Översikt</Title>
           <div>
             {this.state.users.map((user, key) => {
               const role = user.admin ? "Admin" : "Vanlig användare";
 
               return (
-                <div style={{ margin: "2em" }} key={user._id}>
-                  {user.firstname} {user.lastname}{" "}
-                  <Button
-                    color="primary"
-                    onClick={this.toggle}
-                    value={
-                      user.firstname +
-                      " / " +
-                      user.lastname +
-                      " / " +
-                      user.email +
-                      " / " +
-                      user._id +
-                      " / " +
-                      user.admin
-                    }
-                  >
-                    Ändra
-                  </Button>{" "}
-                  <Button
-                    color="danger"
-                    onClick={this.deleteUser}
-                    value={user._id}
-                  >
-                    Ta bort
-                  </Button>
+                <Users key={user._id}>
+                  <NameButtons>
+                    <Name>{user.firstname} {user.lastname}</Name>
+                    <div>
+                      <StyledButtonEdit
+                        onClick={this.toggle}
+                        value={
+                          user.firstname +
+                          " / " +
+                          user.lastname +
+                          " / " +
+                          user.email +
+                          " / " +
+                          user._id +
+                          " / " +
+                          user.admin
+                        }
+                      >
+                        <FontAwesomeIcon icon='edit' />
+                      </StyledButtonEdit>
+                      <StyledButtonDelete
+                        onClick={this.deleteUser}
+                        value={user._id}
+                      >
+                        X
+                      </StyledButtonDelete>
+                    </div>
+                  </NameButtons>
                   <div>
                     <div>
-                      <strong>Användarnamn: </strong>
-                      {user.username}
+                      <UserTitle>Användarnamn:</UserTitle> 
+                      <span>{user.username}</span>
                     </div>
                     <div>
-                      <strong>Email:</strong>
-                      {user.email}
+                      <UserTitle>Email:</UserTitle> 
+                      <span>{user.email}</span>
                     </div>
                     <div>
-                      <strong>Roll:</strong> {role}
+                      <UserTitle>Roll:</UserTitle>
+                      <span>{role}</span>
                     </div>
                   </div>
-                </div>
+                </Users>
               );
             })}
           </div>
 
-          <Modal isOpen={this.state.modal} toggle={this.toggle}>
+          <StyledModal isOpen={this.state.modal} toggle={this.toggle}>
             <ModalHeader toggle={this.toggle}>
-              Ändra {this.state.newFirstname}'s uppgifter
+              <TitleModal>Ändra {this.state.newFirstname}'s uppgifter</TitleModal>
             </ModalHeader>
             <ModalBody>
               <Form onSubmit={this.onSubmit}>
@@ -328,9 +505,9 @@ class Admin extends Component {
                 <FormGroup>
                   <Label>Ändra roll: *</Label>
 
-                  <div style={{ display: "flex" }}>
-                    <h6>Admin</h6>
-                    <input
+                  <StyledRole>
+                    <TitleRole>Admin</TitleRole>
+                    <StyledInput
                       onChange={this.handleChange}
                       value="true"
                       type="radio"
@@ -338,32 +515,34 @@ class Admin extends Component {
                       id="newAdmin"
                     />
 
-                    <h6>Vanlig användare</h6>
-                    <input
+                    <TitleRole>Vanlig användare</TitleRole>
+                    <StyledInput
                       onChange={this.handleChange}
                       value="false"
                       type="radio"
                       name="newAdmin"
                       id="newAdmin"
                     />
-                  </div>
+                  </StyledRole>
                 </FormGroup>
-                <Button color="primary">Ändra</Button>
-                <Button color="secondary" onClick={this.toggle}>
-                  Avbryt
-                </Button>
+                <ButtonsEditCancel>
+                  <StyledButtonEdit>
+                    <FontAwesomeIcon icon='check' /></StyledButtonEdit>
+                  <StyledButtonCancel onClick={this.toggle}>
+                    AVBRYT
+                  </StyledButtonCancel>
+                </ButtonsEditCancel>
               </Form>
             </ModalBody>
-          </Modal>
+          </StyledModal>
 
           <hr />
 
-          <div style={{ margin: "2em" }}>
-            <h5>Skapa ny användare:</h5>
+          <NewUser>
+            <TitleCreateNewUser>Skapa ny användare</TitleCreateNewUser>
 
-            <Form onSubmit={this.createNewUser}>
+            <StyledForm onSubmit={this.createNewUser}>
               <FormGroup>
-                <Label>Användarnamn: *</Label>
                 <Input
                   onChange={this.handleChange}
                   value={this.state.username}
@@ -375,11 +554,13 @@ class Admin extends Component {
                   invalid={this.state.validate.usernameState === "has-danger"}
                 />
                 <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
+                <ErrorMessage>
+                  { errorUsername ? 'Användarnamn finns redan' : null }
+                </ErrorMessage>
               </FormGroup>
 
               <div style={{ display: "flex" }}>
                 <FormGroup>
-                  <Label>Förnamn: *</Label>
                   <Input
                     onChange={this.handleChange}
                     value={this.state.firstname}
@@ -396,7 +577,6 @@ class Admin extends Component {
                 </FormGroup>
 
                 <FormGroup>
-                  <Label>Efternamn: *</Label>
                   <Input
                     onChange={this.handleChange}
                     value={this.state.lastname}
@@ -412,7 +592,6 @@ class Admin extends Component {
               </div>
 
               <FormGroup>
-                <Label>Email: *</Label>
                 <Input
                   onChange={this.handleChange}
                   value={this.state.email}
@@ -423,13 +602,15 @@ class Admin extends Component {
                   valid={this.state.validate.emailState === "has-success"}
                   invalid={this.state.validate.emailState === "has-danger"}
                 />
+                <ErrorMessage>
+                  { errorEmail ? 'Email finns redan' : null }
+                </ErrorMessage>
                 <FormFeedback>
                   Vänligen skriv in en giltig emailadress
                 </FormFeedback>
               </FormGroup>
 
               <FormGroup>
-                <Label>Lösenord: *</Label>
                 <Input
                   onChange={this.handleChange}
                   value={this.state.password}
@@ -442,10 +623,10 @@ class Admin extends Component {
                 />
                 <FormFeedback>Behöver vara minst 6 karaktärer</FormFeedback>
               </FormGroup>
-              <Button>Skapa</Button>
-            </Form>
-          </div>
-        </div>
+              <StyledButtonCreate>Skapa</StyledButtonCreate>
+            </StyledForm>
+          </NewUser>
+        </AdminDashboard>
       );
     }
   }

@@ -10,10 +10,24 @@ import {
     faLock, 
     faExclamationCircle, 
     faSearch,
-    faSignOutAlt
+    faSignOutAlt,
+    faArrowRight,
+    faArrowLeft,
+    faCheck,
+    faEdit
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faUser, faLock, faExclamationCircle, faSearch, faSignOutAlt)
+library.add(
+    faUser, 
+    faLock, 
+    faExclamationCircle, 
+    faSearch, 
+    faSignOutAlt, 
+    faArrowRight, 
+    faArrowLeft, 
+    faCheck,
+    faEdit
+)
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

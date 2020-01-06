@@ -36,13 +36,15 @@ class Register extends Component {
   nextStep = () => {
     const { step, validate } = this.state;
 
-    if (Object.values(validate).includes("has-danger")) {
-      return;
+    if (Object.values(validate).every(item => item === "has-success")) {
+      this.setState({
+        step: step + 1
+      });
+    } else {
+      this.setState({
+        step: 1
+      });
     }
-
-    this.setState({
-      step: step + 1
-    });
   };
 
   prevStep = () => {

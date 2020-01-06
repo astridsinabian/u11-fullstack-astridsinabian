@@ -15,6 +15,8 @@ const StyledNav = styled.nav`
   top: 0;
   width: 100%;
   overflow: hidden;
+  background-color: white;
+  box-shadow: -1px 5px 9px -1px rgba(138,138,138,0.41);
 
   font-family: 'Montserrat', sans-serif;
 `;
@@ -29,14 +31,14 @@ const OtherLinks = styled.span`
 `;
 
 const StyledNavLink = styled(Link)`
-  padding: 5px;
-  color: lightgray;
+  padding: 0 5px;
+  color: #9c8ed4;
   font-weight: bold;
   text-transform: uppercase;
   font-size: 10px;
 
   &:hover {
-    color: #fabd7c;
+    color: #a69bce;
     text-decoration: none;
   }
 `;
@@ -51,12 +53,11 @@ const LogoutButton = styled.button`
   padding: 0 5px;
   border: 0;
 
-  color: lightgray;
-  font-weight: bold;
-  font-size: 13px;
+  color: #9c8ed4;
+  font-size: 12px;
 
   &:hover {
-    color: #fabd7c;
+    color: #a69bce;
     text-decoration: none;
   }
 `;
