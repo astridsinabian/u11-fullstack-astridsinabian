@@ -15,6 +15,7 @@ const StyledNav = styled.nav`
   top: 0;
   width: 100%;
   overflow: hidden;
+  z-index: 1;
   background-color: white;
   box-shadow: -1px 5px 9px -1px rgba(138,138,138,0.41);
 

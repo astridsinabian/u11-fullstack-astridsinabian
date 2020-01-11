@@ -1,8 +1,148 @@
 import React, { Component } from "react";
 import axios from "axios";
 import AuthService from "./AuthService";
-import { Modal, ModalBody, Form, Input, Button } from "reactstrap";
+import { Modal, ModalBody, Form, Input, Spinner } from "reactstrap";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import Moment from "react-moment";
+
+const OpenProfilePage = styled.div`
+  @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 4em;
+  padding: 30px;
+`;
+
+const SpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 6em;
+`;
+
+const Top = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px dotted lightgray;
+  padding: 15px;
+`;
+
+const FirstRow = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0;
+`;
+
+const SecondRow = styled.div`
+  padding: 8px 0 3px 0;
+`;
+
+const Title = styled.h4`
+  line-height: 1.3;
+  padding-right: 8px;
+  margin: 0;
+`;
+
+const StyledButton = styled.button`
+  border: 1px solid lightgray;
+  background-color: lightgray;
+  border-radius: 12px;
+  color: gray;
+  font-weight: bold;
+  padding: 3px 7px;
+  font-size: 12px;
+
+  &:hover {
+    background-color: #e0e0e0;
+    border: 1px solid #e0e0e0;
+  }
+`;
+
+const FollowersFollowing = styled.span`
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  line-height: 1.5;
+`;
+
+const Followers = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+`;
+
+const Following = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Number = styled.span`
+  font-weight: bold;
+`;
+
+const FollowText = styled.div`
+  font-size: 10px;
+`;
+
+const Name = styled.div`
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+const Description = styled.div`
+  font-size: 14px;
+`;
+
+const MergedTweets = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 20px 15px 0 15px;
+`;
+
+const TweetsList = styled.li`
+  display: flex;
+  flex-direction: column;
+  margin: 10px 10px 30px 0;
+`;
+
+const RegularTweetPart = styled.span`
+  padding: 10px;
+  color: lightgray;
+`;
+
+const TweetPart = styled.span`
+  padding: 10px;
+  border: 1px dotted lightgray;
+  border-radius: 12px;
+  margin-left: 25px;
+`;
+
+const RetweetPart = styled.span`
+  padding: 10px;
+  color: lightgray;
+`;
+
+const StyledLink = styled(Link)`
+  padding-right: 5px;
+  color: black;
+  font-weight: bold;
+
+  &:hover {
+    color: #232323;
+    text-decoration: none;
+  }
+`;
+
+const Text = styled.span`
+  margin: 0 5px 0 0;
+  color: black;
+  font-size: 14px;
+`;
 
 class OpenProfile extends Component {
   constructor(props) {
@@ -42,6 +182,11 @@ class OpenProfile extends Component {
     }));
 
     const retweetToString = e.target.value;
+
+    if (retweetToString === undefined) {
+      return;
+    }
+
     const split = retweetToString.split("/", 2);
     let retweetTweet = split[0];
     let retweetUser = split[1];
@@ -229,16 +374,16 @@ class OpenProfile extends Component {
         else if (a.createdAt < b.createdAt) return 1;
         else return 0;
       })
-      .map((tweet, key) => {
+      .map(tweet => {
         if (this.Auth.getToken() !== null) {
           retweetButton = (
-            <button
+            <StyledButton
               onClick={this.toggle}
               value={`${tweet.text} / ${tweet.username}`}
               name="retweet"
             >
-              retweet
-            </button>
+              Retweet
+            </StyledButton>
           );
         }
         if (
@@ -246,11 +391,18 @@ class OpenProfile extends Component {
           tweet.text !== undefined
         ) {
           return (
-            <li key={tweet._id}>
-              {tweet.text} - av:{" "}
-              <Link to={`/user/${tweet.username}`}>{tweet.username}</Link>{" "}
-              {retweetButton} skapad: {tweet.createdAt}
-            </li>
+            <TweetsList key={tweet._id}>
+              <RegularTweetPart>
+                <div>
+                  <StyledLink to={`/user/${tweet.username}`}>
+                    {tweet.username}
+                  </StyledLink>
+                  <Moment format="D MMM YYYY">{tweet.createdAt}</Moment>
+                </div>
+                <Text>{tweet.text}</Text>
+                {retweetButton}
+              </RegularTweetPart>
+            </TweetsList>
           );
         }
         if (
@@ -258,13 +410,25 @@ class OpenProfile extends Component {
           tweet.text === undefined
         ) {
           return (
-            <li key={tweet._id}>
-              {tweet.retweetTweet} - av:{" "}
-              <Link to={`/user/${tweet.retweetUser}`}>{tweet.retweetUser}</Link>{" "}
-              / {tweet.retweetText} - av:{" "}
-              <Link to={`/user/${tweet.username}`}>{tweet.username}</Link>{" "}
-              skapad: {tweet.createdAt}
-            </li>
+            <TweetsList key={tweet._id}>
+              <RetweetPart>
+                <div>
+                <StyledLink to={`/user/${tweet.username}`}>
+                  @{tweet.username}
+                </StyledLink>
+                <Moment format="D MMM YYYY">{tweet.createdAt}</Moment>
+                </div>
+                <Text>{tweet.retweetText}</Text>
+              </RetweetPart>
+              <TweetPart>
+                <div>
+                  <StyledLink to={`/user/${tweet.retweetUser}`}>
+                    @{tweet.retweetUser}
+                  </StyledLink>
+                </div>
+                <Text>{tweet.retweetTweet}</Text>
+              </TweetPart>
+            </TweetsList>
           );
         }
       });
@@ -273,9 +437,13 @@ class OpenProfile extends Component {
       this.userLoggedIn();
       if (user !== username) {
         if (!loggedInUserFollowing.includes(username)) {
-          followButtons = <Button onClick={this.follow}>Följ</Button>;
+          followButtons = (
+            <StyledButton onClick={this.follow}>Följ</StyledButton>
+          );
         } else {
-          followButtons = <Button onClick={this.unfollow}>Avfölj</Button>;
+          followButtons = (
+            <StyledButton onClick={this.unfollow}>Avfölj</StyledButton>
+          );
         }
       }
     }
@@ -283,20 +451,29 @@ class OpenProfile extends Component {
     if (username !== "") {
       userInfo = (
         <div>
-          <h2>{username}'s profil</h2>
-          <div>{followButtons}</div>
-          <div>
-            Följare: {followers.length} Följer: {following.length}
-          </div>
+          <Top>
+            <FirstRow>
+              <Title>{username}</Title> <span>{followButtons}</span>
+              <FollowersFollowing>
+                <Followers>
+                  <Number>{followers.length}</Number>
+                  <FollowText>Följer</FollowText>
+                </Followers>
+                <Following>
+                  <Number>{following.length}</Number>
+                  <FollowText>Följare</FollowText>
+                </Following>
+              </FollowersFollowing>
+            </FirstRow>
+            <SecondRow>
+              <Name>
+                {firstname} {lastname}
+              </Name>
+              <Description>{description}</Description>
+            </SecondRow>
+          </Top>
 
-          <h3>Användarens info:</h3>
-          <div>Användarnamn: {username}</div>
-          <div>Förnamn: {firstname}</div>
-          <div>Efternamn: {lastname}</div>
-          <div>Beskrivning: {description}</div>
-
-          <h3>Tweets:</h3>
-          <ul>{mergedTweets}</ul>
+          <MergedTweets>{mergedTweets}</MergedTweets>
         </div>
       );
     }
@@ -305,10 +482,14 @@ class OpenProfile extends Component {
     }
 
     if (loading) {
-      return <div>laddar...</div>;
+      return (
+        <SpinnerWrapper>
+          <Spinner type="grow" color="secondary" />
+        </SpinnerWrapper>
+      );
     } else {
       return (
-        <div>
+        <OpenProfilePage>
           <Modal
             isOpen={this.state.modal}
             toggle={this.toggle}
@@ -316,24 +497,23 @@ class OpenProfile extends Component {
           >
             <ModalBody>
               <Form onSubmit={this.retweetSubmit}>
+                <div>
+                  <span>{this.state.retweetUser}</span>
+                  <span>{this.state.retweetTweet}</span>
+                </div>
                 <Input
                   onChange={this.handleChange}
                   type="textarea"
                   value={this.state.retweetText}
                   name="retweetText"
+                  placeholder="Skriv något här..."
                 />
-                <div>
-                  {this.state.retweetTweet} - av: {this.state.retweetUser}
-                </div>
-                <Button color="primary">Retweet</Button>
+                <StyledButton>SKICKA</StyledButton>
               </Form>
-              <Button color="secondary" onClick={this.toggle}>
-                Cancel
-              </Button>
             </ModalBody>
           </Modal>
           {userInfo}
-        </div>
+        </OpenProfilePage>
       );
     }
   }

@@ -28,14 +28,13 @@ const StyledForm = styled.form`
 `;
 
 const StyledInput = styled.input`
-  border-left: 0;
-  border-right: 0;
-  border-top: 0;
   background-color: transparent;
   font-size: 12px;
-  border-color: #a69bce;
+  border: 1px solid lightgray;
+  border-radius: 12px;
   padding: 10px;
   width: 100%;
+  margin-left: 5px;
 `;
 
 const StyledButtonSearch = styled.button`

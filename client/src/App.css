@@ -1,64 +1,129 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+
 body {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .input-group .input-group-text {
-    background-color: transparent;
-    color:#9c8ed4;
-    border-left: 0;
-    border-right: 0;
-    border-top: 0;
-    border-radius: 0;
-    border-color: #a69bce;
+  background-color: transparent;
+  color: #9c8ed4;
+  border-right: 0;
 }
 
 .input-group .form-control {
-    border-left: 0;
-    border-right: 0;
-    border-top: 0;
-    border-radius: 0;
-    padding-left: 0;
-    background-color: transparent;
-    font-size: 12px;
-    border-color: #a69bce;
+  padding-left: 0;
+  background-color: transparent;
+  font-size: 12px;
+  border-left: 0;
 }
 
 .input-group .form-control:focus {
-    font-size: 14px;
-    background-color: transparent;
+  font-size: 14px;
+  background-color: transparent;
 }
 
 .form-group .form-control {
-    border-left: 0;
-    border-right: 0;
-    border-top: 0;
-    border-radius: 0;
-    padding-left: 0;
-    background-color: transparent;
-    font-size: 12px;
-    border-color: #a69bce;
+  padding: 5px;
+  background-color: transparent;
+  font-size: 12px;
 }
 
 .form-group .form-control:focus {
-    font-size: 14px;
-    background-color: transparent;
+  font-size: 14px;
+  background-color: transparent;
 }
 
 #description {
-    border-left: 0.5px solid #efefef;
-    border-right: 0.5px solid #efefef;
-    border-top: 0.5px solid #efefef;
-    height: 200px;
-    margin: 15px;
-    padding: 10px;
+  height: 200px;
+  margin: 15px;
+  padding: 10px;
 }
 
 #description:focus {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .sc-chPdSV .form-group {
-    margin-bottom: 0;
+  margin-bottom: 0;
+}
+
+.sc-htoDjs .btn-secondary {
+  font-size: 12px;
+  background-color: #61b2ff;
+  border: 1px solid #61b2ff;
+}
+
+.sc-htoDjs .btn-secondary:hover {
+  background-color: #75bcff;
+  border: 1px solid #75bcff;
+}
+
+.sc-htoDjs .btn-secondary .disabled,
+.btn-secondary:disabled:hover {
+  background-color: #6c757d;
+  border: 1px solid #6c757d;
+}
+
+ul li button[name="retweet"] {
+  margin: 0 5px;
+}
+
+.modal-open {
+  font-family: "Montserrat", sans-serif;
+}
+
+.modal-open form {
+  padding: 10px 0;
+}
+
+.modal-open form span {
+  color: black;
+  font-size: 14px;
+}
+
+.modal-open form span:first-child {
+    font-weight: bold;
+    padding-right: 8px;
+}
+
+.modal-open form button {
+  float: right;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.modal-open form textarea {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.tweets {
+    margin-bottom: 1.5em;
+}
+
+.tweets .form-group textarea {
+    height: 120px;
+    padding: 10px;
+}
+
+.tweets .form-group button {
+    float: right;
+    margin-top: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.tweets ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tweets ul li {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 10px 30px 0;
 }

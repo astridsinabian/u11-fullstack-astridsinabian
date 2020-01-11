@@ -1,25 +1,45 @@
 import React, { Component } from "react";
 import AuthService from "./AuthService";
 import axios from "axios";
-import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { Form, FormGroup, Label, Input, Button, Spinner } from "reactstrap";
 import Tweets from "./Tweets";
 import styled from "styled-components";
 
 const Auth = new AuthService();
 
 const Container = styled.div`
+  @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+  font-family: "Montserrat", sans-serif;
   display: flex;
-  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  margin: 10px 120px;
+  margin: 6em 0;
+  padding: 0 15% 0 15%;
+`;
+
+const Title = styled.h3`
+  color: #9c8ed4;
 `;
 
 const FormStyled = styled(Form)`
-  margin: 50px 0;
+  width: 500px;
+  margin: 2em 0 8em 0;
 `;
 
-const DivStyled = styled.div`
-  margin: 30px 0;
+const StyledButton = styled(Button)`
+  float: right;
+`;
+
+const TextWhenUpdated = styled.div`
+  font-size: 12px;
+  font-weght: bold;
+  color: gray;
+`;
+
+const SpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 6em;
 `;
 
 class Profile extends Component {
@@ -137,15 +157,17 @@ class Profile extends Component {
     } = this.state;
 
     if (loading) {
-      return <div>Laddar profil...</div>;
+      return (
+        <SpinnerWrapper>
+          <Spinner type="grow" color="secondary" />
+        </SpinnerWrapper>
+      );
     } else {
       return (
         <Container>
-          <div>
-            <h1>
-              Välkommen {firstname} {lastname}!
-            </h1>
-          </div>
+          <Title>
+            Hejsan, {firstname} {lastname}!
+          </Title>
 
           <FormStyled onSubmit={this.onSubmit}>
             <FormGroup>
@@ -189,16 +211,18 @@ class Profile extends Component {
             </FormGroup>
 
             {updateButton === true ? (
-              <Button>Ändra uppgifter</Button>
+              <StyledButton>ÄNDRA UPPGIFTER</StyledButton>
             ) : (
-              <Button disabled>Ändra uppgifter</Button>
+              <StyledButton disabled>ÄNDRA UPPGIFTER</StyledButton>
             )}
-            <div>{updatedUserText === true ? "Ändringar uppdaterade" : ""}</div>
+            <TextWhenUpdated>
+              {updatedUserText === true ? "Ändringar uppdaterade" : ""}
+            </TextWhenUpdated>
           </FormStyled>
 
-          <DivStyled>
+          <div>
             <Tweets />
-          </DivStyled>
+          </div>
         </Container>
       );
     }
