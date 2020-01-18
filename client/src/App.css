@@ -6,6 +6,12 @@ body {
   padding: 0;
 }
 
+.btn-secondary .disabled, .btn-secondary:disabled {
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
 .input-group .input-group-text {
   background-color: transparent;
   color: #9c8ed4;
@@ -84,8 +90,8 @@ ul li button[name="retweet"] {
 }
 
 .modal-open form span:first-child {
-    font-weight: bold;
-    padding-right: 8px;
+  font-weight: bold;
+  padding-right: 8px;
 }
 
 .modal-open form button {
@@ -95,28 +101,29 @@ ul li button[name="retweet"] {
 }
 
 .modal-open form textarea {
-    margin-top: 10px;
-    font-size: 14px;
+  margin-top: 10px;
+  font-size: 14px;
 }
 
 .tweets {
-    display: flex;
-    flex-direction: column;
-    width: 500px;
-    margin-bottom: 1.5em;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin-bottom: 1.5em;
+  white-space: normal;
 }
 
 .tweets .form-group textarea {
-    height: 120px;
-    padding: 10px;
+  height: 120px;
+  padding: 10px;
 }
 
 .tweets .form-group button {
-    float: right;
-    margin-top: 10px;
-    font-size: 12px;
-    text-transform: uppercase;
-    font-weight: bold;
+  float: right;
+  margin-top: 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .tweets ul {
@@ -129,4 +136,10 @@ ul li button[name="retweet"] {
     display: flex;
     flex-direction: column;
     margin: 10px 10px 30px 0;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .tweets {
+    width: 100%;
+  }
 }

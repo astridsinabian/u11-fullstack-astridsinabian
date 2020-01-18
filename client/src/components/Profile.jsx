@@ -14,16 +14,31 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   margin: 6em 0;
-  padding: 0 15% 0 15%;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 20px;
+    white-space: nowrap;
+    margin: 5em 1em;
+  }
 `;
 
 const Title = styled.h3`
   color: #9c8ed4;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 20px;
+    white-space: nowrap;
+  }
 `;
 
 const FormStyled = styled(Form)`
   width: 500px;
   margin: 2em 0 8em 0;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    width: 100%;
+    margin-bottom: 5em;
+  }
 `;
 
 const StyledButton = styled(Button)`

@@ -44,6 +44,17 @@ const StyledLink = styled(Link)`
     color: #232323;
     text-decoration: none;
   }
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 18px;
+  }
+`;
+
+const StyledMoment = styled(Moment)`
+  color: #D3D3D3;
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 14px;
+  }
 `;
 
 const StyledButton = styled.button`
@@ -65,6 +76,10 @@ const Text = styled.span`
   margin: 0 5px 0 0;
   color: black;
   font-size: 14px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 class Tweets extends Component {
@@ -122,6 +137,11 @@ class Tweets extends Component {
     }));
 
     const retweetToString = e.target.value;
+
+    if(retweetToString === undefined) {
+      return;
+    }
+
     const split = retweetToString.split("/", 2);
     let retweetTweet = split[0];
     let retweetUser = split[1];
@@ -254,7 +274,7 @@ class Tweets extends Component {
                   <StyledLink to={`/user/${tweet.username}`}>
                     {tweet.username}
                   </StyledLink>
-                  <Moment format="D MMM YYYY">{tweet.createdAt}</Moment>
+                  <StyledMoment format="D MMM YYYY">{tweet.createdAt}</StyledMoment>
                 </div>
                 <Text>{tweet.text}</Text>
                 <StyledButton
@@ -288,7 +308,7 @@ class Tweets extends Component {
                   <StyledLink to={`/user/${tweet.retweetUser}`}>
                     {tweet.retweetUser}
                   </StyledLink>
-                  <Moment format="D MMM YYYY">{tweet.createdAt}</Moment>
+                  <StyledMoment format="D MMM YYYY">{tweet.createdAt}</StyledMoment>
                 </div>
                 <Text>{tweet.retweetTweet}</Text>
               </TweetPart>
@@ -333,20 +353,18 @@ class Tweets extends Component {
           >
             <ModalBody>
               <Form onSubmit={this.retweetSubmit}>
+                <div>
+                  <span>{this.state.retweetUser}</span>
+                  <span>{this.state.retweetTweet}</span>
+                </div>
                 <Input
                   onChange={this.handleChange}
                   type="textarea"
                   value={this.state.retweetText}
                   name="retweetText"
                 />
-                <div>
-                  {this.state.retweetTweet} - av: {this.state.retweetUser}
-                </div>
-                <Button color="primary">Retweet</Button>
+                <StyledButton color="primary">Retweet</StyledButton>
               </Form>
-              <Button color="secondary" onClick={this.toggle}>
-                Cancel
-              </Button>
             </ModalBody>
           </Modal>
 
