@@ -39,6 +39,10 @@ const Users = styled.div`
   border-radius: 12px;
   margin: 20px 50px;
   padding: 10px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    margin: 10px 15px;
+  }
 `;
 
 const NameButtons = styled.div`
@@ -130,6 +134,10 @@ const StyledInput = styled.input`
 
 const NewUser = styled.div`
   margin: 0px 55px 60px 55px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    margin: 0px 20px 60px 20px;
+  }
 `;
 
 const TitleCreateNewUser = styled.h6`
