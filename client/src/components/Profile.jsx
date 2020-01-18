@@ -220,9 +220,8 @@ class Profile extends Component {
             </TextWhenUpdated>
           </FormStyled>
 
-          <div>
-            <Tweets />
-          </div>
+          <Tweets />
+
         </Container>
       );
     }

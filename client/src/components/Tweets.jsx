@@ -10,7 +10,6 @@ import Moment from "react-moment";
 const TweetsContent = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
 `;
 
 const SpinnerWrapper = styled.div`
