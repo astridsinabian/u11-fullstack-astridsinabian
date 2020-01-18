@@ -335,6 +335,7 @@ class Tweets extends Component {
                   type="textarea"
                   name="text"
                   placeholder="Vad har du för tankar just nu?"
+                  maxLength="400"
                 />
 
                 {publishButton === true ? (
@@ -362,6 +363,7 @@ class Tweets extends Component {
                   type="textarea"
                   value={this.state.retweetText}
                   name="retweetText"
+                  maxLength="400"
                 />
                 <StyledButton color="primary">Retweet</StyledButton>
               </Form>

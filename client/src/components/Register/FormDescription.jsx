@@ -77,6 +77,7 @@ export class FormDescription extends Component {
               id="description"
               valid={descriptionState === "has-success"}
               invalid={descriptionState === "has-danger"}
+              maxLength="400"
             />
           </FormGroup>
 
