@@ -1,9 +1,86 @@
 import React, { Component } from "react";
-import { Form, FormGroup, Input, Button } from "reactstrap";
+import { Form, FormGroup, Input, Button, Spinner } from "reactstrap";
 import axios from "axios";
 import AuthService from "./AuthService";
 import { Modal, ModalBody } from "reactstrap";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import Moment from "react-moment";
+
+const TweetsContent = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const SpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 6em;
+`;
+
+const TweetPart = styled.span`
+  padding: 10px;
+  border: 1px dotted lightgray;
+  border-radius: 12px;
+  margin-left: 25px;
+`;
+
+const RegularTweetPart = styled.span`
+  padding: 10px;
+  color: lightgray;
+`;
+
+const RetweetPart = styled.span`
+  padding: 10px;
+  color: lightgray;
+`;
+
+const StyledLink = styled(Link)`
+  padding-right: 5px;
+  color: black;
+  font-weight: bold;
+
+  &:hover {
+    color: #232323;
+    text-decoration: none;
+  }
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 18px;
+  }
+`;
+
+const StyledMoment = styled(Moment)`
+  color: #D3D3D3;
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 14px;
+  }
+`;
+
+const StyledButton = styled.button`
+  border: 1px solid lightgray;
+  background-color: lightgray;
+  border-radius: 12px;
+  color: gray;
+  font-weight: bold;
+  padding: 3px 7px;
+  font-size: 12px;
+
+  &:hover {
+    background-color: #e0e0e0;
+    border: 1px solid #e0e0e0;
+  }
+`;
+
+const Text = styled.span`
+  margin: 0 5px 0 0;
+  color: black;
+  font-size: 14px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 12px;
+  }
+`;
 
 class Tweets extends Component {
   constructor(props) {
@@ -60,6 +137,11 @@ class Tweets extends Component {
     }));
 
     const retweetToString = e.target.value;
+
+    if(retweetToString === undefined) {
+      return;
+    }
+
     const split = retweetToString.split("/", 2);
     let retweetTweet = split[0];
     let retweetUser = split[1];
@@ -187,16 +269,22 @@ class Tweets extends Component {
         ) {
           return (
             <li key={tweet._id}>
-              TWEET: [ {tweet.text} ] av:{" "}
-              <Link to={`/user/${tweet.username}`}>{tweet.username}</Link>
-              <button
-                onClick={this.toggle}
-                value={`${tweet.text} / ${tweet.username}`}
-                name="retweet"
-              >
-                retweet
-              </button>{" "}
-              skapad: {tweet.createdAt}
+              <RegularTweetPart>
+                <div>
+                  <StyledLink to={`/user/${tweet.username}`}>
+                    {tweet.username}
+                  </StyledLink>
+                  <StyledMoment format="D MMM YYYY">{tweet.createdAt}</StyledMoment>
+                </div>
+                <Text>{tweet.text}</Text>
+                <StyledButton
+                  onClick={this.toggle}
+                  value={`${tweet.text} / ${tweet.username}`}
+                  name="retweet"
+                >
+                Retweet
+                </StyledButton>
+              </RegularTweetPart>
             </li>
           );
         }
@@ -207,40 +295,56 @@ class Tweets extends Component {
         ) {
           return (
             <li key={tweet._id}>
-              TWEET: [ {tweet.retweetTweet} ] - av:{" "}
-              <Link to={`/user/${tweet.retweetUser}`}>{tweet.retweetUser}</Link>{" "}
-              / RETWEET: [ {tweet.retweetText} ] - av:{" "}
-              <Link to={`/user/${tweet.username}`}>{tweet.username}</Link>{" "}
-              skapad: {tweet.createdAt}
+              <RetweetPart>
+                <div>
+                  <StyledLink to={`/user/${tweet.username}`}>
+                    {tweet.username}
+                  </StyledLink>
+                </div>
+                <Text>{tweet.retweetText}</Text>
+              </RetweetPart>
+              <TweetPart>
+                <div>
+                  <StyledLink to={`/user/${tweet.retweetUser}`}>
+                    {tweet.retweetUser}
+                  </StyledLink>
+                  <StyledMoment format="D MMM YYYY">{tweet.createdAt}</StyledMoment>
+                </div>
+                <Text>{tweet.retweetTweet}</Text>
+              </TweetPart>
             </li>
           );
         }
       });
 
     if (loading) {
-      return <div>Laddar...</div>;
+      return (
+        <SpinnerWrapper>
+          <Spinner type="grow" color="secondary" />
+        </SpinnerWrapper>
+      );
     } else {
       return (
-        <div>
-          <h1>Twittra här</h1>
+        <TweetsContent>
+          <div className="tweets">
+            <Form onSubmit={this.onSubmit}>
+              <FormGroup>
+                <Input
+                  onChange={this.handleChange}
+                  value={this.state.text}
+                  type="textarea"
+                  name="text"
+                  placeholder="Vad har du för tankar just nu?"
+                />
 
-          <Form onSubmit={this.onSubmit}>
-            <FormGroup>
-              <Input
-                onChange={this.handleChange}
-                value={this.state.text}
-                type="textarea"
-                name="text"
-                placeholder="Vad har du för tankar just nu?"
-              />
-
-              {publishButton === true ? (
-                <Button>Publicera</Button>
-              ) : (
-                <Button disabled>Publicera</Button>
-              )}
-            </FormGroup>
-          </Form>
+                {publishButton === true ? (
+                  <Button>Publicera</Button>
+                ) : (
+                  <Button disabled>Publicera</Button>
+                )}
+              </FormGroup>
+            </Form>
+          </div>
 
           <Modal
             isOpen={this.state.modal}
@@ -249,28 +353,25 @@ class Tweets extends Component {
           >
             <ModalBody>
               <Form onSubmit={this.retweetSubmit}>
+                <div>
+                  <span>{this.state.retweetUser}</span>
+                  <span>{this.state.retweetTweet}</span>
+                </div>
                 <Input
                   onChange={this.handleChange}
                   type="textarea"
                   value={this.state.retweetText}
                   name="retweetText"
                 />
-                <div>
-                  {this.state.retweetTweet} - av: {this.state.retweetUser}
-                </div>
-                <Button color="primary">Retweet</Button>
+                <StyledButton color="primary">Retweet</StyledButton>
               </Form>
-              <Button color="secondary" onClick={this.toggle}>
-                Cancel
-              </Button>
             </ModalBody>
           </Modal>
 
-          <div>
-            <h2>Flöde</h2>
+          <div className="tweets">
             <ul>{mergedTweets}</ul>
           </div>
-        </div>
+        </TweetsContent>
       );
     }
   }
