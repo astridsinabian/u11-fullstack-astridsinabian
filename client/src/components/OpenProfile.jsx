@@ -457,11 +457,11 @@ class OpenProfile extends Component {
               <FollowersFollowing>
                 <Followers>
                   <Number>{followers.length}</Number>
-                  <FollowText>Följer</FollowText>
+                  <FollowText>Följare</FollowText>
                 </Followers>
                 <Following>
                   <Number>{following.length}</Number>
-                  <FollowText>Följare</FollowText>
+                  <FollowText>Följer</FollowText>
                 </Following>
               </FollowersFollowing>
             </FirstRow>
