@@ -20,11 +20,19 @@ const Title = styled.h2`
   font-size: 26px;
   padding: 10px;
   color: gray;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 22px;
+  }
 `;
 
 const StyledForm = styled.form`
   display: flex;
   width: 60%;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    width: 80%;
+  }
 `;
 
 const StyledInput = styled.input`
