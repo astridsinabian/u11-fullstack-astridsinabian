@@ -21,10 +21,19 @@ const LoginContentWrapper = styled.div`
   font-family: 'Montserrat', sans-serif;
   height: 60vw;
   margin: 5em 3em;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    flex-direction: column;
+    margin: 5em 2rem;
+  }
 `;
 
 const LoginSideDesign = styled.div`
   width: 110vw;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 const LoginFormWrapper = styled.div`
@@ -38,6 +47,10 @@ const LoginFormWrapper = styled.div`
 const StyledForm = styled(Form)`
   margin-top: 20px;
   width: 25vw;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 const StyledTitle = styled.h3`
