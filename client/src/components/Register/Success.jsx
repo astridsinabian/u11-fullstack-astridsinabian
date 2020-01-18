@@ -10,6 +10,10 @@ const StepSuccess = styled.div`
   justify-content: center;
   align-items: center;
   height: 55vw;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    margin-top: 12.5em;
+  }
 `;
 
 const Title = styled.h4`

@@ -13,11 +13,19 @@ const StepOne = styled.div`
   align-items: center;
   height: 65vw;
   margin-top: 5em;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    margin-top: 12.5em;
+  }
 `;
 
 const Title = styled.h4`
   color: gray;
   font-size: 20px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 18px;
+  }
 `;
 
 const StepsText = styled.h6`
@@ -30,6 +38,11 @@ const FormTitleWrapper = styled.div`
   background-color: white;
   border-radius: 12px;
   box-shadow: 3px 5px 9px -1px rgba(138,138,138,0.41);
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    width: 100%;
+    box-shadow: 0 0 0 0  white;
+  }
 `;
 
 const StyledButton = styled(Button)`
@@ -42,6 +55,11 @@ const Name = styled.div`
 
 const FormWrapper = styled.div`
   margin-top: 30px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    width: 100%;
+    margin: 0;
+  }
 `;
 
 export class FormUserDetails extends Component {
