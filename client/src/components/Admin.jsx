@@ -24,6 +24,7 @@ const AdminDashboard = styled.div`
 
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin-top: 70px;
   font-size: 12px;
 `;
@@ -39,9 +40,11 @@ const Users = styled.div`
   border-radius: 12px;
   margin: 20px 50px;
   padding: 10px;
+  width: 500px;
 
   @media (min-width: 320px) and (max-width: 480px) {
     margin: 10px 15px;
+    width: 300px;
   }
 `;
 
@@ -134,9 +137,11 @@ const StyledInput = styled.input`
 
 const NewUser = styled.div`
   margin: 0px 55px 60px 55px;
+  width: 500px;
 
   @media (min-width: 320px) and (max-width: 480px) {
     margin: 0px 20px 60px 20px;
+    width: 300px;
   }
 `;
 
