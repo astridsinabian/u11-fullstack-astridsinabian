@@ -25,10 +25,19 @@ const StyledImg = styled.img`
 const Title = styled.h1`
   margin-top: 10px;
   color: black;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 28px;
+  }
 `;
 
 const Slogan = styled.div`
   color: #a193d6;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    text-align: center;
+    font-size: 13px;
+  }
 `;
 
 const StyledFooter = styled.footer`
@@ -38,6 +47,10 @@ const StyledFooter = styled.footer`
   color: gray;
   font-size: 10px;
   height: 100px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    margin-top: 5rem;
+  }
 `;
 
 class FrontPage extends Component {
