@@ -11,9 +11,22 @@ const OpenProfilePage = styled.div`
   font-family: "Montserrat", sans-serif;
   display: flex;
   flex-direction: column;
+  align-items: center;
 
   margin-top: 4em;
   padding: 30px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    padding: 15px;
+  }
+`;
+
+const Wrapper = styled.div`
+  width: 500px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 const SpinnerWrapper = styled.div`
@@ -102,6 +115,10 @@ const MergedTweets = styled.ul`
   list-style: none;
   margin: 0;
   padding: 20px 15px 0 15px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    padding: 0;
+  }
 `;
 
 const TweetsList = styled.li`
@@ -142,6 +159,10 @@ const Text = styled.span`
   margin: 0 5px 0 0;
   color: black;
   font-size: 14px;
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 class OpenProfile extends Component {
@@ -450,7 +471,7 @@ class OpenProfile extends Component {
 
     if (username !== "") {
       userInfo = (
-        <div>
+        <Wrapper>
           <Top>
             <FirstRow>
               <Title>{username}</Title> <span>{followButtons}</span>
@@ -474,7 +495,7 @@ class OpenProfile extends Component {
           </Top>
 
           <MergedTweets>{mergedTweets}</MergedTweets>
-        </div>
+        </Wrapper>
       );
     }
     if (username === "") {
