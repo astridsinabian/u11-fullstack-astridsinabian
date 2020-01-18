@@ -528,6 +528,7 @@ class OpenProfile extends Component {
                   value={this.state.retweetText}
                   name="retweetText"
                   placeholder="Skriv något här..."
+                  maxLength="400"
                 />
                 <StyledButton>SKICKA</StyledButton>
               </Form>
