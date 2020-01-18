@@ -11,6 +11,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import OpenProfile from "./components/OpenProfile";
 import SearchUser from "./components/SearchUser";
 import Admin from "./components/Admin";
+import NotFound from "./components/NotFound";
 
 const Container = styled.div`
   margin: 0;
@@ -31,7 +32,7 @@ class App extends Component {
             <Route path="/login" component={Login} />
             <Route path="/user" exact component={SearchUser} />
             <Route path="/user/:username" exact component={OpenProfile} />
-            <Route path="*" component={() => "404 NOT FOUND"} />
+            <Route path="*" component={NotFound} />
           </Switch>
         </Container>
       </Router>
