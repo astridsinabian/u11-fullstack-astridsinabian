@@ -18,7 +18,7 @@ app.use(cors());
 
 // Connect to DB
 mongoose.connect(
-  process.env.MONGODB_URI,
+  process.env.DB_CONNECT,
   { useNewUrlParser: true, useCreateIndex: true },
   () => console.log("MongoDB connection established succesfully!")
 );
