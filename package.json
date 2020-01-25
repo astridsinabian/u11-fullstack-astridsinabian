@@ -5,7 +5,7 @@
     "scripts": {
         "start:client:dev": "cd client && npm run start",
         "start:server:dev": "node --inspect ./server/bin/www",
-        "build": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build && cd server && npm install",
+        "build": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build && cd ../server && npm install",
         "start:prod": "cd server && node ./bin/www",
         "start": "cd server && node ./bin/www"
     }
