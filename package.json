@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node --inspect app.js",
-    "start:prod": "npm run start"
+    "start:prod": "npm install && npm run start"
   },
   "keywords": [],
   "author": "",
