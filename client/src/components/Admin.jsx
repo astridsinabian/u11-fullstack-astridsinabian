@@ -464,7 +464,7 @@ class Admin extends Component {
                             user.admin
                           }
                         >
-                          <FontAwesomeIcon icon="edit" />
+                          ✎
                         </StyledButtonEdit>
                         <StyledButtonDelete
                           onClick={this.deleteUser}
