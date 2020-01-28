@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node --inspect app.js"
+    "start": "node --inspect app.js",
+    "start:prod": "npm run start"
   },
   "keywords": [],
   "author": "",
