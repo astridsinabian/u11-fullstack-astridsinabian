@@ -24,7 +24,6 @@ const LoginContentWrapper = styled.div`
 
   @media (min-width: 320px) and (max-width: 480px) {
     flex-direction: column;
-    margin: 5em 2rem;
   }
 `;
 
@@ -33,6 +32,7 @@ const LoginSideDesign = styled.div`
 
   @media (min-width: 320px) and (max-width: 480px) {
     width: 100%;
+    margin-bottom: 3rem;
   }
 `;
 
