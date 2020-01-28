@@ -109,7 +109,7 @@ class SearchUser extends Component {
 
   searchUser(text) {
     axios
-      .post("http://localhost:5000/api/user/search", { text })
+      .post("/api/user/search", { text })
       .then(res =>
         this.setState({
           username: res.data.user.username,

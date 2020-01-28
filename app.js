@@ -31,11 +31,10 @@ app.use("/api/user", authRoute);
 app.use("/api/tweets", tweets);
 app.use("/api/admin", adminRoute);
 
-app.use(express.static(path.join(__dirname, "client/build")));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+app.use(express.static("client/build"));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
-
 
 // What starts the server
 app.listen(port, () => {

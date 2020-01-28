@@ -275,7 +275,7 @@ class Admin extends Component {
   }
 
   register = data => {
-    axios.post("http://localhost:5000/api/user/register", data).catch(error => {
+    axios.post("/api/user/register", data).catch(error => {
       if (error.response.data === "Email already exists") {
         this.setState({
           errorEmail: true
@@ -379,7 +379,7 @@ class Admin extends Component {
     };
 
     const res = await axios.get(
-      "http://localhost:5000/api/admin/users",
+      "/api/admin/users",
       config
     );
 
@@ -411,14 +411,14 @@ class Admin extends Component {
       admin: this.state.newAdmin
     };
 
-    axios.patch("http://localhost:5000/api/admin/editUser", { user });
+    axios.patch("/api/admin/editUser", { user });
   };
 
   deleteUser = e => {
     e.preventDefault();
     const id = e.target.value.trim();
 
-    axios.delete(`http://localhost:5000/api/admin/deleteUser/${id}`);
+    axios.delete(`/api/admin/deleteUser/${id}`);
 
     this.getUsers();
   };

@@ -114,7 +114,7 @@ class Profile extends Component {
       }
     };
     const res = await axios.get(
-      "http://localhost:5000/api/user/profile",
+      "/api/user/profile",
       config
     );
 
@@ -151,7 +151,7 @@ class Profile extends Component {
         description: this.state.description
       }
     };
-    axios.patch("http://localhost:5000/api/user/profile", config);
+    axios.patch("/api/user/profile", config);
   };
 
   componentDidMount() {

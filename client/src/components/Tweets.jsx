@@ -173,7 +173,7 @@ class Tweets extends Component {
       }
     };
     const res = await axios.post(
-      "http://localhost:5000/api/tweets/add",
+      "/api/tweets/add",
       config
     );
     this.setState({ text: res.data.text });
@@ -197,7 +197,7 @@ class Tweets extends Component {
       }
     };
     const res = await axios.post(
-      "http://localhost:5000/api/tweets/retweet",
+      "/api/tweets/retweet",
       config
     );
     this.setState({
@@ -221,12 +221,12 @@ class Tweets extends Component {
     };
 
     const resFollowing = await axios.get(
-      "http://localhost:5000/api/user/profile",
+      "/api/user/profile",
       config
     );
-    const resTweets = await axios.get("http://localhost:5000/api/tweets");
+    const resTweets = await axios.get("/api/tweets");
     const resRetweets = await axios.get(
-      "http://localhost:5000/api/tweets/retweets/retweets"
+      "/api/tweets/retweets/retweets"
     );
 
     try {

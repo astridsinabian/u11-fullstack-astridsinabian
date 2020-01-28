@@ -247,7 +247,7 @@ class OpenProfile extends Component {
       }
     };
     const res = await axios.post(
-      "http://localhost:5000/api/tweets/retweet",
+      "/api/tweets/retweet",
       config
     );
     this.setState({
@@ -273,7 +273,7 @@ class OpenProfile extends Component {
         username: this.state.username
       }
     };
-    await axios.post("http://localhost:5000/api/user/follow", config);
+    await axios.post("/api/user/follow", config);
 
     this.getUserProfile();
   }
@@ -293,14 +293,14 @@ class OpenProfile extends Component {
       }
     };
 
-    await axios.post("http://localhost:5000/api/user/unfollow", config);
+    await axios.post("/api/user/unfollow", config);
 
     this.getUserProfile();
   }
 
   async getUserProfile() {
     const { username } = this.props.match.params;
-    const res = await axios.get(`http://localhost:5000/api/user/${username}`);
+    const res = await axios.get(`/api/user/${username}`);
 
     try {
       this._isMounted &&
@@ -322,14 +322,14 @@ class OpenProfile extends Component {
 
   async getUserTweets() {
     const { username } = this.props.match.params;
-    const res = await axios.get(`http://localhost:5000/api/tweets/${username}`);
+    const res = await axios.get(`/api/tweets/${username}`);
     this._isMounted &&
       this.setState({
         data: res.data
       });
 
     const resRetweets = await axios.get(
-      `http://localhost:5000/api/tweets/retweets/${username}`
+      `/api/tweets/retweets/${username}`
     );
     this.setState({
       retweetsData: resRetweets.data
@@ -353,7 +353,7 @@ class OpenProfile extends Component {
       };
 
       const res = await axios.get(
-        "http://localhost:5000/api/user/profile",
+        "/api/user/profile",
         config
       );
       this.setState({

@@ -88,7 +88,7 @@ export class Confirm extends Component {
   };
 
   register = (data) => {
-     axios.post("http://localhost:5000/api/user/register", data)
+     axios.post("/api/user/register", data)
       .then(() => {
         this.props.nextStep();
       })

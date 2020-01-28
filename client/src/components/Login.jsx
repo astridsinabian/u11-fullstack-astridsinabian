@@ -122,7 +122,7 @@ class Login extends Component {
       password: password
     };
     axios
-      .post("http://localhost:5000/api/user/login", { user })
+      .post("/api/user/login", { user })
       .then(res => {
         this.Auth.setToken(res.data.token);
         this.Auth.setRole(res.data.admin);
